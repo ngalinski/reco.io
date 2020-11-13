@@ -3,4 +3,37 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <!--screen title strings-->
+    <string name="title_newsfeed">Newsfeed</string>
+    <string name="title_categories">Categories</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_lists">Your Lists</string>
+    <string name="title_reviews">Product Reviews</string>
+    <string name="title_writing">Write Recommendation</string>
+    <string name="title_wish_list">Wish List</string>
+    <string name="title_add_review">Add Review</string>
+
+    <!--profile strings-->
+    <string name="pro_following">Following</string>
+    <string name="pro_followers">Followers</string>
+    <string name="pro_reviews">All Reviews</string>
+    <string name="pro_lists">Lists</string>
+    
+    <!--categories strings-->
+    <string name="cat_electronics">Electronics</string>
+    <string name="cat_beauty">Beauty Products</string>
+    <string name="cat_consumables">Foods and Beverages</string>
+
+    <!--recommendation strings-->
+    <string name="rec_rating">Your Rating</string>
+    <string name="rec_product">Search for product</string>
+    <string name="rec_review">Write your review (optional)</string>
+    <string name="rec_submit">Submit Review</string>
+    
+    <!--reviews strings-->
+    <string name="rev_rating">Avg. Rating</string>
+    <string name="rev_comment">Leave a comment</string>
+    <string name="rev_reviews">See all reviews</string>
+    
 </resources>
