@@ -3,23 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_newsfeed">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="edu.neu.madcourse.recoio.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_newsfeed"
+        android:name="edu.neu.madcourse.recoio.ui.newsfeed.NewsfeedFragment"
+        android:label="@string/title_newsfeed"
+        tools:layout="@layout/fragment_newsfeed" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="edu.neu.madcourse.recoio.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_categories"
+        android:name="edu.neu.madcourse.recoio.ui.categories.CategoriesFragment"
+        android:label="@string/title_categories"
+        tools:layout="@layout/fragment_categories" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="edu.neu.madcourse.recoio.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_your_lists"
+        android:name="edu.neu.madcourse.recoio.ui.yourlists.YourListsFragment"
+        android:label="@string/title_lists"
+        tools:layout="@layout/fragment_your_lists" />
+    <fragment
+        android:id="@+id/navigation_add_review"
+        android:name="edu.neu.madcourse.recoio.ui.addreview.AddReviewFragment"
+        android:label="@string/title_add_review"
+        tools:layout="@layout/fragment_add_review" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="edu.neu.madcourse.recoio.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

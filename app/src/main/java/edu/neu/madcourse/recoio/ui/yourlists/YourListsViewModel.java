@@ -1,16 +1,16 @@
-package edu.neu.madcourse.recoio.ui.home;
+package edu.neu.madcourse.recoio.ui.yourlists;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class YourListsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public YourListsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is your lists fragment");
     }
 
     public LiveData<String> getText() {

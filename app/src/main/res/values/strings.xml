@@ -12,7 +12,7 @@
     <string name="title_reviews">Product Reviews</string>
     <string name="title_writing">Write Recommendation</string>
     <string name="title_wish_list">Wish List</string>
-    <string name="title_add_review">Add Review</string>
+    <string name="title_add_review">Add a Review</string>
 
     <!--profile strings-->
     <string name="pro_following">Following</string>
@@ -39,5 +39,6 @@
     <!--privacy strings-->
     <string name="previous">Previous</string>
     <string name="privacy_policy">Privacy Policy</string>
-    
+    <string name="this_is_the_add_a_review_fragment">This is the Add a review fragment</string>
+
 </resources>

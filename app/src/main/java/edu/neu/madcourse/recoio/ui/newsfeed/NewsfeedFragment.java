@@ -1,4 +1,4 @@
-package edu.neu.madcourse.recoio.ui.dashboard;
+package edu.neu.madcourse.recoio.ui.newsfeed;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import edu.neu.madcourse.recoio.R;
 
-public class DashboardFragment extends Fragment {
+public class NewsfeedFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private NewsfeedViewModel newsfeedViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        newsfeedViewModel =
+                ViewModelProviders.of(this).get(NewsfeedViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_newsfeed, container, false);
+        final TextView textView = root.findViewById(R.id.text_home);
+        newsfeedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
