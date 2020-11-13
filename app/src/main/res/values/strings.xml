@@ -35,5 +35,9 @@
     <string name="rev_rating">Avg. Rating</string>
     <string name="rev_comment">Leave a comment</string>
     <string name="rev_reviews">See all reviews</string>
+
+    <!--privacy strings-->
+    <string name="previous">Previous</string>
+    <string name="privacy_policy">Privacy Policy</string>
     
 </resources>
