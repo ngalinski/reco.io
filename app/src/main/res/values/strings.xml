@@ -20,6 +20,13 @@
     <string name="pro_reviews">All Reviews</string>
     <string name="pro_lists">Lists</string>
     <string name="biography">Biography</string>
+
+    <!--user edit strings-->
+    <string name="phone">Phone Number</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="location">Location</string>
     
     <!--categories strings-->
     <string name="cat_electronics">Electronics</string>
