@@ -34,7 +34,7 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        final TextView profileTextView = getView().findViewById(R.id.profileTextView);
+        final TextView profileTextView = getView().findViewById(R.id.profile_name);
 
         mViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
