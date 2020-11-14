@@ -19,6 +19,7 @@
     <string name="pro_followers">Followers</string>
     <string name="pro_reviews">All Reviews</string>
     <string name="pro_lists">Lists</string>
+    <string name="biography">Biography</string>
     
     <!--categories strings-->
     <string name="cat_electronics">Electronics</string>
