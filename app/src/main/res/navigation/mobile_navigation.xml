@@ -3,33 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_newsfeed">
+    app:startDestination="@id/loginFragment">
 
+    <navigation android:id="@+id/app_navigation"
+        app:startDestination="@id/navigation_add_review">
+        <fragment
+            android:id="@+id/navigation_add_review"
+            android:name="edu.neu.madcourse.recoio.ui.addreview.AddReviewFragment"
+            android:label="@string/title_add_review"
+            tools:layout="@layout/fragment_add_review" />
+        <fragment
+            android:id="@+id/navigation_your_lists"
+            android:name="edu.neu.madcourse.recoio.ui.yourlists.YourListsFragment"
+            android:label="@string/title_lists"
+            tools:layout="@layout/fragment_your_lists" />
+        <fragment
+            android:id="@+id/navigation_newsfeed"
+            android:name="edu.neu.madcourse.recoio.ui.newsfeed.NewsfeedFragment"
+            android:label="@string/title_newsfeed"
+            tools:layout="@layout/fragment_newsfeed" />
+        <fragment
+            android:id="@+id/navigation_categories"
+            android:name="edu.neu.madcourse.recoio.ui.categories.CategoriesFragment"
+            android:label="@string/title_categories"
+            tools:layout="@layout/fragment_categories" />
+        <fragment
+            android:id="@+id/navigation_profile"
+            android:name="edu.neu.madcourse.recoio.ui.profile.ProfileFragment"
+            android:label="@string/title_profile"
+            tools:layout="@layout/fragment_profile" />
+    </navigation>
     <fragment
-        android:id="@+id/navigation_newsfeed"
-        android:name="edu.neu.madcourse.recoio.ui.newsfeed.NewsfeedFragment"
-        android:label="@string/title_newsfeed"
-        tools:layout="@layout/fragment_newsfeed" />
-
+        android:id="@+id/loginFragment"
+        android:name="edu.neu.madcourse.recoio.ui.login.LoginFragment"
+        android:label="Login Fragment"
+        tools:layout="@layout/login_fragment">
+        <action
+            android:id="@+id/action_loginFragment_to_app_navigation"
+            app:destination="@id/app_navigation" />
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/navigation_categories"
-        android:name="edu.neu.madcourse.recoio.ui.categories.CategoriesFragment"
-        android:label="@string/title_categories"
-        tools:layout="@layout/fragment_categories" />
-
-    <fragment
-        android:id="@+id/navigation_your_lists"
-        android:name="edu.neu.madcourse.recoio.ui.yourlists.YourListsFragment"
-        android:label="@string/title_lists"
-        tools:layout="@layout/fragment_your_lists" />
-    <fragment
-        android:id="@+id/navigation_add_review"
-        android:name="edu.neu.madcourse.recoio.ui.addreview.AddReviewFragment"
-        android:label="@string/title_add_review"
-        tools:layout="@layout/fragment_add_review" />
-    <fragment
-        android:id="@+id/navigation_profile"
-        android:name="edu.neu.madcourse.recoio.ui.profile.ProfileFragment"
-        android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile" />
+        android:id="@+id/signUpFragment"
+        android:name="edu.neu.madcourse.recoio.ui.signup.SignUpFragment"
+        android:label="sign_up_fragment"
+        tools:layout="@layout/sign_up_fragment" >
+        <action
+            android:id="@+id/action_signUpFragment_to_app_navigation"
+            app:destination="@id/app_navigation" />
+    </fragment>
 </navigation>
