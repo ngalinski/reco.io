@@ -18,7 +18,7 @@ import edu.neu.madcourse.recoio.Review;
 
 public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Review> reviews;
+    private final ArrayList<Review> reviews;
 
     public ReviewRecyclerViewAdapter(ArrayList<Review> reviews) {
         this.reviews = reviews;
@@ -37,7 +37,7 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Review review = reviews.get(position);
         holder.productTextView.setText(review.getProductTitle());
-        holder.productRatingBar.setRating((Float.parseFloat(review.getRating().toString())));
+        holder.productRatingBar.setRating((Float.parseFloat(review.getRating())));
         holder.reviewTextView.setText(review.getReviewText());
         holder.reviewerTextView.setText(String.format(Locale.getDefault(),
                 "Reviewed by: %s", review.getReviewer()));

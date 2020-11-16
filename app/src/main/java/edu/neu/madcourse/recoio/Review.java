@@ -2,12 +2,12 @@ package edu.neu.madcourse.recoio;
 
 public class Review {
     private String productTitle;
-    private Double rating;
+    private String rating;
     private String reviewText;
     private String reviewer;
     private Integer likes;
 
-    public Review(String productTitle, Double rating, String reviewText, String reviewer) {
+    public Review(String productTitle, String rating, String reviewText, String reviewer) {
         this.productTitle = productTitle;
         this.rating = rating;
         this.reviewText = reviewText;
@@ -22,11 +22,11 @@ public class Review {
         this.productTitle = productTitle;
     }
 
-    public Double getRating() {
+    public String getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 

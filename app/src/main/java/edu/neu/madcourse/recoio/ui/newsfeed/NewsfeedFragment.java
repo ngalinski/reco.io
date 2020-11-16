@@ -53,7 +53,7 @@ public class NewsfeedFragment extends Fragment {
                 Review newReview = new Review(
                         (String) snapshot.child("product").getValue(),
                         // this will never be null, ignore the warning
-                        Double.parseDouble(String.valueOf(snapshot.child("rating").getValue())),
+                        (String) snapshot.child("rating").getValue(),
                         (String) snapshot.child("review").getValue(),
                         (String) snapshot.child("owner").getValue()
                 );
