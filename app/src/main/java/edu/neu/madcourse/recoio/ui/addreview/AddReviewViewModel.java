@@ -3,6 +3,7 @@ package edu.neu.madcourse.recoio.ui.addreview;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -15,7 +16,7 @@ public class AddReviewViewModel extends ViewModel {
     private MutableLiveData<String> review = new MutableLiveData<>();
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference posts = mDatabase.child("posts");
+    DatabaseReference reviews = mDatabase.child("reviews");
 
     public MutableLiveData<String> getThingToReview() {
         return thingToReview;
@@ -44,10 +45,11 @@ public class AddReviewViewModel extends ViewModel {
     public void postReview() {
         // TODO - Add the logged in user to the new post database entry
         Date date = Calendar.getInstance().getTime();
-        DatabaseReference newPostRef = posts.child(String.valueOf(date.getTime()));
-        newPostRef.child("reviewText").setValue(getReview());
-        newPostRef.child("rating").setValue(getRating());
-        newPostRef.child("owner").setValue("TODO: currentUser");
+        DatabaseReference newPostRef = reviews.child(String.valueOf(date.getTime()));
+        newPostRef.child("product").setValue(getThingToReview().getValue());
+        newPostRef.child("reviewText").setValue(getReview().getValue());
+        newPostRef.child("rating").setValue(String.valueOf(getRating().getValue()));
+        newPostRef.child("owner").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
         newPostRef.child("likes").setValue(0);
     }
 }

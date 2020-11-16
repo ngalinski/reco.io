@@ -112,8 +112,6 @@ public class SignUpFragment extends Fragment {
         DatabaseReference newUser = usersReference.child(currentUser.getUid());
         newUser.child("username").setValue(usernameEditText.getText().toString());
         newUser.child("email").setValue(currentUser.getEmail());
-        BottomNavigationView bottomNavigationView = requireView().findViewById(R.id.nav_view);
-        bottomNavigationView.setVisibility(View.VISIBLE);
         NavHostFragment.findNavController(SignUpFragment.this)
                 .navigate(R.id.action_signUpFragment_to_app_navigation);
     }

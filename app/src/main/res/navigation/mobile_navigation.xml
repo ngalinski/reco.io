@@ -6,7 +6,7 @@
     app:startDestination="@id/loginFragment">
 
     <navigation android:id="@+id/app_navigation"
-        app:startDestination="@id/navigation_add_review">
+        app:startDestination="@id/navigation_newsfeed">
         <fragment
             android:id="@+id/navigation_add_review"
             android:name="edu.neu.madcourse.recoio.ui.addreview.AddReviewFragment"

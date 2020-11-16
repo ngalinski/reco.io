@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reviewCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <RelativeLayout
+        android:id="@+id/reviewRelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/productTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product Title"
+            android:textSize="24sp" />
+
+        <RatingBar
+            android:id="@+id/productRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/productTitleTextView"
+            android:clickable="false" />
+
+        <ImageView
+            android:id="@+id/productImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@id/productRatingBar"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/productReviewTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/productRatingBar"
+            tools:text="@tools:sample/lorem" />
+
+        <TextView
+            android:id="@+id/reviewerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/productReviewTextView"
+            android:text="Reviewed by: User" />
+
+        <ImageView
+            android:id="@+id/likeImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/reviewerTextView"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_like" />
+
+        <ImageView
+            android:id="@+id/commentsImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/reviewerTextView"
+            android:layout_margin="8dp"
+            android:layout_toEndOf="@id/likeImageView"
+            android:src="@drawable/ic_comments" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
