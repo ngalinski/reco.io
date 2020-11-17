@@ -32,6 +32,9 @@
             android:name="edu.neu.madcourse.recoio.ui.profile.ProfileFragment"
             android:label="@string/title_profile"
             tools:layout="@layout/fragment_profile" />
+        <action
+            android:id="@+id/action_global_loginFragment"
+            app:destination="@id/loginFragment" />
     </navigation>
     <fragment
         android:id="@+id/loginFragment"

@@ -8,17 +8,25 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import edu.neu.madcourse.recoio.R;
+import edu.neu.madcourse.recoio.ui.signup.SignUpFragment;
 
 public class ProfileFragment extends Fragment {
 
     private ProfileViewModel mViewModel;
+
+    private ImageView settingsImageView;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -34,7 +42,7 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        final TextView profileTextView = getView().findViewById(R.id.profile_name);
+        final TextView profileTextView = requireView().findViewById(R.id.profile_name);
 
         mViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -44,4 +52,20 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        settingsImageView = requireView().findViewById(R.id.settingsImageView);
+
+        settingsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mAuth.getCurrentUser() != null) {
+                    mAuth.signOut();
+                    NavHostFragment.findNavController(ProfileFragment.this)
+                            .navigate(R.id.action_global_loginFragment);
+                }
+            }
+        });
+    }
 }

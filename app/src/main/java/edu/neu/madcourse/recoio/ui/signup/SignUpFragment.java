@@ -38,7 +38,7 @@ public class SignUpFragment extends Fragment {
     private FirebaseUser currentUser;
 
     private Button signUpButton;
-    private EditText usernameEditText;
+    private EditText nameEditText;
     private EditText emailEditText;
     private EditText passwordEditText;
 
@@ -64,7 +64,7 @@ public class SignUpFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         signUpButton = requireView().findViewById(R.id.signUpButton);
-        usernameEditText = requireView().findViewById(R.id.signUpUsernameEditText);
+        nameEditText = requireView().findViewById(R.id.signUpUsernameEditText);
         emailEditText = requireView().findViewById(R.id.signUpEmailEditText);
         passwordEditText = requireView().findViewById(R.id.signUpPasswordEditText);
 
@@ -78,9 +78,9 @@ public class SignUpFragment extends Fragment {
 
     public boolean signUp() {
         if(!emailEditText.getText().toString().equals("") &&
-                !usernameEditText.getText().toString().equals("") &&
+                !nameEditText.getText().toString().equals("") &&
                 !passwordEditText.getText().toString().equals("")) {
-            getUsernameAvailability(usernameEditText.getText().toString());
+            registerUser();
         }
         return false;
     }
@@ -106,33 +106,35 @@ public class SignUpFragment extends Fragment {
 
     public void saveToDatabase() {
         DatabaseReference usersReference = mDatabase.child("users");
-        DatabaseReference usernames = mDatabase.child("usernames");
-        usernames.child(usernameEditText.getText().toString()).setValue(true);
+//        DatabaseReference usernames = mDatabase.child("usernames");
+//        usernames.child(nameEditText.getText().toString()).setValue(true);
         // we are going to use the UID to identify users in the database
         DatabaseReference newUser = usersReference.child(currentUser.getUid());
-        newUser.child("username").setValue(usernameEditText.getText().toString());
+        newUser.child("name").setValue(nameEditText.getText().toString());
         newUser.child("email").setValue(currentUser.getEmail());
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+        bottomNavigationView.setVisibility(View.VISIBLE);
         NavHostFragment.findNavController(SignUpFragment.this)
                 .navigate(R.id.action_signUpFragment_to_app_navigation);
     }
 
-    public void getUsernameAvailability(String newUsername) {
-        DatabaseReference usernames = mDatabase.child("usernames");
-        System.out.println(usernames.getKey());
-
-        usernames.child(newUsername).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.getValue() == null) {
-                    System.out.println(snapshot.getValue());
-                    registerUser();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
+//    public void getUsernameAvailability(String newUsername) {
+//        DatabaseReference usernames = mDatabase.child("usernames");
+//        System.out.println(usernames.getKey());
+//
+//        usernames.child(newUsername).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.getValue() == null) {
+//                    System.out.println(snapshot.getValue());
+//                    registerUser();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 }

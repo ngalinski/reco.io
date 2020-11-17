@@ -24,7 +24,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/productTitleTextView"
-            android:clickable="false" />
+            android:clickable="false"
+            android:isIndicator="true"
+            style="?android:ratingBarStyleSmall"/>
 
         <ImageView
             android:id="@+id/productImageView"

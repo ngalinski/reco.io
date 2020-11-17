@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,8 +36,7 @@ public class NewsfeedFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        newsfeedViewModel =
-                ViewModelProviders.of(this).get(NewsfeedViewModel.class);
+        newsfeedViewModel = new ViewModelProvider(this).get(NewsfeedViewModel.class);
         return inflater.inflate(R.layout.fragment_newsfeed, container, false);
     }
 
@@ -52,10 +52,9 @@ public class NewsfeedFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Review newReview = new Review(
                         (String) snapshot.child("product").getValue(),
-                        // this will never be null, ignore the warning
                         (String) snapshot.child("rating").getValue(),
                         (String) snapshot.child("review").getValue(),
-                        (String) snapshot.child("owner").getValue()
+                        (String) snapshot.child("ownerName").getValue()
                 );
                 reviews.add(newReview);
                 adapter.notifyDataSetChanged();

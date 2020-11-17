@@ -73,10 +73,7 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(!loginButtonPressed()) {
-                    Toast.makeText(requireActivity(), "Unable to log in", Toast.LENGTH_SHORT).show();
-                }
+                loginButtonPressed();
             }
         });
 
@@ -101,26 +98,25 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    public boolean loginButtonPressed() {
-        final boolean[] success = {false};
+    public void loginButtonPressed() {
         if (!emailEditText.getText().toString().equals("")
-                && passwordEditText.getText().toString().equals("")) {
+                && !passwordEditText.getText().toString().equals("")) {
             mAuth.signInWithEmailAndPassword(emailEditText.getText().toString(),
                     passwordEditText.getText().toString()).addOnCompleteListener(requireActivity(),
                     new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()) {
+                                bottomNavigationView.setVisibility(View.VISIBLE);
                                 NavHostFragment.findNavController(LoginFragment.this)
                                         .navigate(R.id.action_loginFragment_to_app_navigation);
-                                bottomNavigationView.setVisibility(View.VISIBLE);
-                                success[0] = true;
                             } else {
-                                success[0] = false;
+                                Toast.makeText(requireActivity(),
+                                        "Unable to log in", Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     });
         }
-        return success[0];
     }
 }
