@@ -10,7 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import edu.neu.madcourse.recoio.R;
 
@@ -18,18 +22,29 @@ public class CategoriesFragment extends Fragment {
 
     private CategoriesViewModel categoriesViewModel;
 
+    private RecyclerView categoriesRecyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private CategoriesRecyclerViewAdapter adapter;
+
+    String[] categories = {"Trending", "Shows/Movies", "Food", "Electronics", "Music"};
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        categoriesViewModel =
-                ViewModelProviders.of(this).get(CategoriesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_categories, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        categoriesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+        categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
+        return inflater.inflate(R.layout.fragment_categories, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        createAdapter();
+    }
+
+    public void createAdapter() {
+        categoriesRecyclerView = requireView().findViewById(R.id.categoriesRecyclerView);
+        layoutManager = new LinearLayoutManager(getActivity());
+        categoriesRecyclerView.setLayoutManager(layoutManager);
+        adapter = new CategoriesRecyclerViewAdapter(categories);
+        categoriesRecyclerView.setAdapter(adapter);
     }
 }

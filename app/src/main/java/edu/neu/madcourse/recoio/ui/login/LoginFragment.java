@@ -108,11 +108,12 @@ public class LoginFragment extends Fragment {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()) {
                                 bottomNavigationView.setVisibility(View.VISIBLE);
-                                NavHostFragment.findNavController(LoginFragment.this)
+                                NavHostFragment.findNavController( LoginFragment.this)
                                         .navigate(R.id.action_loginFragment_to_app_navigation);
                             } else {
                                 Toast.makeText(requireActivity(),
-                                        "Unable to log in", Toast.LENGTH_SHORT).show();
+                                        "Wrong Email/Password combination",
+                                        Toast.LENGTH_SHORT).show();
 
                             }
                         }

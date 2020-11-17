@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/categoryCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:padding="8dp">
+
+    <RelativeLayout
+        android:id="@+id/categoryRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/categoryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:layout_margin="8dp"
+            tools:text="@tools:sample/full_names" />
+
+        <ImageView
+            android:id="@+id/reviewOneImageView"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_below="@id/categoryTextView"
+            tools:srcCompat="@tools:sample/avatars"
+            android:layout_margin="8dp"/>
+
+        <ImageView
+            android:id="@+id/reviewTwoImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/categoryTextView"
+            android:layout_toEndOf="@id/reviewOneImageView"
+            tools:srcCompat="@tools:sample/avatars"
+            android:layout_margin="8dp"/>
+
+        <ImageView
+            android:id="@+id/reviewThreeImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/categoryTextView"
+            android:layout_toEndOf="@id/reviewTwoImageView"
+            tools:srcCompat="@tools:sample/avatars"
+            android:layout_margin="8dp"/>
+
+        <ImageView
+            android:id="@+id/reviewFourImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/categoryTextView"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@id/reviewThreeImageView"
+            tools:srcCompat="@tools:sample/avatars" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
