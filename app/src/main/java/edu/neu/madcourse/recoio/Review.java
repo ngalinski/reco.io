@@ -1,17 +1,35 @@
 package edu.neu.madcourse.recoio;
 
 public class Review {
+    private String uid;
     private String productTitle;
     private String rating;
     private String reviewText;
     private String reviewer;
     private Integer likes;
 
-    public Review(String productTitle, String rating, String reviewText, String reviewer) {
+    public Review(String uid, String productTitle, String rating, String reviewText, String reviewer) {
         this.productTitle = productTitle;
         this.rating = rating;
         this.reviewText = reviewText;
         this.reviewer = reviewer;
+        this.uid = uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
     }
 
     public String getProductTitle() {

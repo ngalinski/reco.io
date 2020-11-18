@@ -1,5 +1,6 @@
 package edu.neu.madcourse.recoio.ui.newsfeed;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,19 @@ import edu.neu.madcourse.recoio.Review;
 
 public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecyclerViewAdapter.ViewHolder> {
 
+    public interface ItemClickListener {
+        void onItemClick(int position, Context context);
+    }
+
     private final ArrayList<Review> reviews;
+    private ItemClickListener itemClickListener;
 
     public ReviewRecyclerViewAdapter(ArrayList<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public void setItemClickListener(ItemClickListener listener) {
+        itemClickListener = listener;
     }
 
     @NonNull
@@ -30,7 +40,7 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
         View newReview = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.review_cell, parent, false
         );
-        return new ViewHolder(newReview);
+        return new ViewHolder(newReview, itemClickListener);
     }
 
     @Override
@@ -57,13 +67,20 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
         TextView reviewTextView;
         TextView reviewerTextView;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull final View itemView, final ItemClickListener listener) {
             super(itemView);
             productTextView = itemView.findViewById(R.id.productTitleTextView);
             productRatingBar = itemView.findViewById(R.id.productRatingBar);
             productImageView = itemView.findViewById(R.id.productImageView);
             reviewTextView = itemView.findViewById(R.id.productReviewTextView);
             reviewerTextView = itemView.findViewById(R.id.reviewerTextView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(getLayoutPosition(), itemView.getContext());
+                }
+            });
         }
     }
 }

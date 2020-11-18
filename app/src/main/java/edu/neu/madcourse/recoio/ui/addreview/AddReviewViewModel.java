@@ -18,6 +18,11 @@ public class AddReviewViewModel extends ViewModel {
     private MutableLiveData<String> thingToReview = new MutableLiveData<>();
     private MutableLiveData<Float> rating = new MutableLiveData<>();
     private MutableLiveData<String> review = new MutableLiveData<>();
+    private MutableLiveData<String> uid = new MutableLiveData<>();
+
+
+
+    private MutableLiveData<String> category = new MutableLiveData<>();
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     DatabaseReference reviews = mDatabase.child("reviews");
@@ -28,6 +33,14 @@ public class AddReviewViewModel extends ViewModel {
 
     public void setThingToReview(String thingToReview) {
         this.thingToReview.setValue(thingToReview);
+    }
+
+    public void setUid(String uid) {
+        this.uid.setValue(uid);
+    }
+
+    public MutableLiveData<String> getUid() {
+        return uid;
     }
 
     public MutableLiveData<Float> getRating() {
@@ -46,22 +59,30 @@ public class AddReviewViewModel extends ViewModel {
         this.review.setValue(review);
     }
 
+    public MutableLiveData<String> getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category.setValue(category);
+    }
+
     public void postReview() {
-        // TODO - Add the logged in user to the new post database entry
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             DatabaseReference user = mDatabase.child("users")
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             user.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Date date = Calendar.getInstance().getTime();
-                    DatabaseReference newPostRef = reviews.child(String.valueOf(date.getTime()));
+                    DatabaseReference newPostRef = reviews.child(getUid().getValue());
                     newPostRef.child("product").setValue(getThingToReview().getValue());
                     newPostRef.child("reviewText").setValue(getReview().getValue());
                     newPostRef.child("rating").setValue(String.valueOf(getRating().getValue()));
                     newPostRef.child("owner").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                     newPostRef.child("ownerName").setValue(snapshot.child("name").getValue());
                     newPostRef.child("likes").setValue(0);
+                    newPostRef.child("category").setValue(getCategory().getValue());
+                    newPostRef.child("uid").setValue(getUid().getValue());
                 }
 
                 @Override

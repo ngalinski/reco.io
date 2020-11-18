@@ -21,12 +21,20 @@
             android:id="@+id/navigation_newsfeed"
             android:name="edu.neu.madcourse.recoio.ui.newsfeed.NewsfeedFragment"
             android:label="@string/title_newsfeed"
-            tools:layout="@layout/fragment_newsfeed" />
+            tools:layout="@layout/fragment_newsfeed" >
+            <action
+                android:id="@+id/action_navigation_newsfeed_to_reviewFragment"
+                app:destination="@id/reviewFragment" />
+        </fragment>
         <fragment
             android:id="@+id/navigation_categories"
             android:name="edu.neu.madcourse.recoio.ui.categories.CategoriesFragment"
             android:label="@string/title_categories"
-            tools:layout="@layout/fragment_categories" />
+            tools:layout="@layout/fragment_categories" >
+            <action
+                android:id="@+id/action_navigation_categories_to_reviewFragment2"
+                app:destination="@id/reviewFragment" />
+        </fragment>
         <fragment
             android:id="@+id/navigation_profile"
             android:name="edu.neu.madcourse.recoio.ui.profile.ProfileFragment"
@@ -35,6 +43,11 @@
         <action
             android:id="@+id/action_global_loginFragment"
             app:destination="@id/loginFragment" />
+        <fragment
+            android:id="@+id/reviewFragment"
+            android:name="edu.neu.madcourse.recoio.ui.review.ReviewFragment"
+            android:label="review_fragment"
+            tools:layout="@layout/review_fragment" />
     </navigation>
     <fragment
         android:id="@+id/loginFragment"

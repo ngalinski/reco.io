@@ -26,7 +26,7 @@ public class CategoriesFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private CategoriesRecyclerViewAdapter adapter;
 
-    String[] categories = {"Trending", "Shows/Movies", "Food", "Electronics", "Music"};
+    String[] categories = {"Trending", "Shows/Movies", "Food", "Electronics", "Music", "Other"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

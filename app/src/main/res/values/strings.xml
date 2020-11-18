@@ -49,4 +49,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="this_is_the_add_a_review_fragment">This is the Add a review fragment</string>
 
+
+    <string name="category">Category</string>
+
 </resources>
