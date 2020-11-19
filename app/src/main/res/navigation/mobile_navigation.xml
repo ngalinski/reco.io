@@ -46,8 +46,14 @@
         <fragment
             android:id="@+id/reviewFragment"
             android:name="edu.neu.madcourse.recoio.ui.review.ReviewFragment"
-            android:label="review_fragment"
-            tools:layout="@layout/review_fragment" />
+            tools:layout="@layout/review_fragment">
+            <action
+                android:id="@+id/action_reviewFragment_to_navigation_newsfeed"
+                app:destination="@id/navigation_newsfeed" />
+            <action
+                android:id="@+id/action_reviewFragment_to_navigation_categories"
+                app:destination="@id/navigation_categories" />
+        </fragment>
     </navigation>
     <fragment
         android:id="@+id/loginFragment"
