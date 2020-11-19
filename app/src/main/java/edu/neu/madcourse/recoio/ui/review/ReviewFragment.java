@@ -111,18 +111,13 @@ public class ReviewFragment extends Fragment {
                 new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        Comment comment = new Comment(
-                                (String) snapshot.child("commentOwnerName").getValue(),
-                                (String) snapshot.child("commentText").getValue(),
-                                (String) snapshot.child("timestamp").getValue()
-                        );
+                        Comment comment = new Comment(snapshot);
                         commentsArrayList.add(comment);
                         commentsAdapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        commentsAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -158,12 +153,15 @@ public class ReviewFragment extends Fragment {
             mDatabase.child("users").child(commenter.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    DatabaseReference newComment = reviews.child(reviewUID)
+                    Comment newComment = new Comment(
+                            (String)snapshot.child("name").getValue(),
+                            commentEditText.getText().toString(),
+                            commentUID.toString(),
+                            commenter.getUid()
+                    );
+                    DatabaseReference newCommentReference = reviews.child(reviewUID)
                             .child("comments").child(String.valueOf(commentUID.getTime()));
-                    newComment.child("commentText").setValue(commentEditText.getText().toString());
-                    newComment.child("commentOwnerID").setValue(commenter.getUid());
-                    newComment.child("timestamp").setValue(commentUID.toString());
-                    newComment.child("commentOwnerName").setValue(snapshot.child("name").getValue());
+                    newCommentReference.setValue(newComment);
                 }
 
                 @Override
