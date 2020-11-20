@@ -35,6 +35,7 @@ import java.util.Date;
 import edu.neu.madcourse.recoio.Comment;
 import edu.neu.madcourse.recoio.R;
 
+// TODO: make keyboard go away easier + exit out of review once posted
 public class ReviewFragment extends Fragment {
 
     private ReviewViewModel mViewModel;

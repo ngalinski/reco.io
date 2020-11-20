@@ -1,5 +1,6 @@
 package edu.neu.madcourse.recoio.ui.privacy;
 
+// TODO: link privacy page somewhere
 public class PrivacyModel {
     private String title;
 

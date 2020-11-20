@@ -14,13 +14,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 import java.util.Date;
 
+// TODO: add a search/match for reviews
 public class AddReviewViewModel extends ViewModel {
     private MutableLiveData<String> thingToReview = new MutableLiveData<>();
     private MutableLiveData<Float> rating = new MutableLiveData<>();
     private MutableLiveData<String> review = new MutableLiveData<>();
     private MutableLiveData<String> uid = new MutableLiveData<>();
-
-
 
     private MutableLiveData<String> category = new MutableLiveData<>();
 

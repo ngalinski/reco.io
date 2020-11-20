@@ -23,6 +23,7 @@ import java.util.Date;
 
 import edu.neu.madcourse.recoio.R;
 
+// TODO: add a photo
 public class AddReviewFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private AddReviewViewModel mViewModel;

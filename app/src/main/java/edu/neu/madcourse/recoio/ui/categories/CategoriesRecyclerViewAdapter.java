@@ -29,6 +29,7 @@ public class CategoriesRecyclerViewAdapter
         return new ViewHolder(category);
     }
 
+    // TODO: add photos in category lists
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.categoryTextView.setText(categories[position]);

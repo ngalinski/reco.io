@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import edu.neu.madcourse.recoio.R;
 
+// TODO: confirm password match, change name to username
 public class SignUpFragment extends Fragment {
 
     private SignUpViewModel mViewModel;

@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import edu.neu.madcourse.recoio.R;
 
+// TODO: make this appear at opening of app / ask permission to stay logged in
 public class LoginFragment extends Fragment {
 
     private LoginViewModel mViewModel;

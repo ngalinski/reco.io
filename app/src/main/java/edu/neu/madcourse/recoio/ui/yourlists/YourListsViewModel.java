@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+// TODO: implement lists
 public class YourListsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
