@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,7 @@ public class SignUpFragment extends Fragment {
     private EditText nameEditText;
     private EditText emailEditText;
     private EditText passwordEditText;
+    private EditText passwordVerify;
 
     public static SignUpFragment newInstance() {
         return new SignUpFragment();
@@ -68,6 +71,7 @@ public class SignUpFragment extends Fragment {
         nameEditText = requireView().findViewById(R.id.signUpUsernameEditText);
         emailEditText = requireView().findViewById(R.id.signUpEmailEditText);
         passwordEditText = requireView().findViewById(R.id.signUpPasswordEditText);
+        passwordVerify = requireView().findViewById(R.id.signUpPasswordVerify);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +84,8 @@ public class SignUpFragment extends Fragment {
     public boolean signUp() {
         if(!emailEditText.getText().toString().equals("") &&
                 !nameEditText.getText().toString().equals("") &&
-                !passwordEditText.getText().toString().equals("")) {
+                !passwordEditText.getText().toString().equals("") &&
+                isEmail() && checkPassword()) {
             registerUser();
         }
         return false;
@@ -117,6 +122,15 @@ public class SignUpFragment extends Fragment {
         bottomNavigationView.setVisibility(View.VISIBLE);
         NavHostFragment.findNavController(SignUpFragment.this)
                 .navigate(R.id.action_signUpFragment_to_app_navigation);
+    }
+
+    boolean isEmail() {
+        return (!TextUtils.isEmpty(emailEditText.toString()) &&
+                Patterns.EMAIL_ADDRESS.matcher(emailEditText.toString()).matches());
+    }
+
+    boolean checkPassword() {
+        return passwordEditText.toString().equals(passwordVerify.toString());
     }
 
 //    public void getUsernameAvailability(String newUsername) {
