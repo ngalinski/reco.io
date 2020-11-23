@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -27,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,9 +45,11 @@ public class ReviewFragment extends Fragment {
     private ReviewViewModel mViewModel;
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference reviews = mDatabase.child("reviews");
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    private StorageReference reviewPicturesReference = storageReference.child("reviewPictures");
 
-    TextView productTextName;
-    TextView reviewerNameTextView;
+    private TextView productTextName;
+    private TextView reviewerNameTextView;
     ImageView productImage;
     RatingBar ratingBar;
     TextView reviewTextView;
@@ -98,6 +104,10 @@ public class ReviewFragment extends Fragment {
                         reviewTextView.setText((String) snapshot.child("reviewText").getValue());
                         ratingBar.setRating(Float.parseFloat((String) snapshot.child("rating").getValue()));
                         reviewerNameTextView.setText((String) snapshot.child("ownerName").getValue());
+                        if ((Boolean) snapshot.child("hasPicture").getValue()) {
+                            StorageReference pictureRef = reviewPicturesReference.child(reviewUID);
+                            Glide.with(requireView()).load(pictureRef).into(productImage);
+                        }
                     }
 
                     @Override

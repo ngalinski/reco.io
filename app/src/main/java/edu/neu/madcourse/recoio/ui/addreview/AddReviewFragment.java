@@ -186,14 +186,10 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
     public void postReviewPressed() {
         if (!productSearchEditText.getText().toString().equals("")) {
             Date date = Calendar.getInstance().getTime();
-            mViewModel.setUid(String.valueOf(date.getTime()));
-            mViewModel.setThingToReview(productSearchEditText.getText().toString());
-            mViewModel.setRating(ratingBar.getRating());
-            mViewModel.setCategory(categoriesSpinner.getSelectedItem().toString());
-            mViewModel.setReview(!reviewEditText.getText().toString().isEmpty()
-                    ? reviewEditText.getText().toString() : "");
-            mViewModel.postReview();
+            boolean hasPicture = false;
+            // this code is based off of the google firebase docs code
             if (newProductBitMap != null) {
+                hasPicture = true;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 newProductBitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
@@ -212,7 +208,14 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                     }
                 });
             }
-
+            mViewModel.setUid(String.valueOf(date.getTime()));
+            mViewModel.setThingToReview(productSearchEditText.getText().toString());
+            mViewModel.setRating(ratingBar.getRating());
+            mViewModel.setCategory(categoriesSpinner.getSelectedItem().toString());
+            mViewModel.setReview(!reviewEditText.getText().toString().isEmpty()
+                    ? reviewEditText.getText().toString() : "");
+            mViewModel.setHasPicture(hasPicture);
+            mViewModel.postReview();
         }
     }
 

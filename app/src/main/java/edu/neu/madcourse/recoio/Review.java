@@ -7,13 +7,24 @@ public class Review {
     private String reviewText;
     private String reviewer;
     private Integer likes;
+    private Boolean hasPicture;
 
-    public Review(String uid, String productTitle, String rating, String reviewText, String reviewer) {
+    public Review(String uid, String productTitle, String rating, String reviewText, String reviewer,
+                  Boolean hasPicture) {
         this.productTitle = productTitle;
         this.rating = rating;
         this.reviewText = reviewText;
         this.reviewer = reviewer;
         this.uid = uid;
+        this.hasPicture = hasPicture;
+    }
+
+    public Boolean hasPicture() {
+        return hasPicture;
+    }
+
+    public void setHasPicture(Boolean hasPicture) {
+        this.hasPicture = hasPicture;
     }
 
     public void setUid(String uid) {

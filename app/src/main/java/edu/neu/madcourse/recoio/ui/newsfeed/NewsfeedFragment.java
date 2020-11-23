@@ -57,7 +57,8 @@ public class NewsfeedFragment extends Fragment {
                         (String) snapshot.child("product").getValue(),
                         (String) snapshot.child("rating").getValue(),
                         (String) snapshot.child("review").getValue(),
-                        (String) snapshot.child("ownerName").getValue()
+                        (String) snapshot.child("ownerName").getValue(),
+                        (Boolean) snapshot.child("hasPicture").getValue()
                 );
                 reviews.add(newReview);
                 adapter.notifyDataSetChanged();

@@ -11,6 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -25,6 +30,7 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
 
     private final ArrayList<Review> reviews;
     private ItemClickListener itemClickListener;
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
     public ReviewRecyclerViewAdapter(ArrayList<Review> reviews) {
         this.reviews = reviews;
@@ -51,7 +57,13 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
         holder.reviewTextView.setText(review.getReviewText());
         holder.reviewerTextView.setText(String.format(Locale.getDefault(),
                 "Reviewed by: %s", review.getReviewer()));
-        //TODO: load an image into the cell
+        if (review.hasPicture()) {
+            StorageReference reviewImage = storageReference.child("reviewPictures")
+                    .child(review.getUid());
+            Glide.with(holder.itemView)
+                    .load(reviewImage).into(holder.productImageView);
+        }
+
 
     }
 

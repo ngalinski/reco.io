@@ -20,6 +20,7 @@ public class AddReviewViewModel extends ViewModel {
     private MutableLiveData<Float> rating = new MutableLiveData<>();
     private MutableLiveData<String> review = new MutableLiveData<>();
     private MutableLiveData<String> uid = new MutableLiveData<>();
+    private MutableLiveData<Boolean> hasPicture = new MutableLiveData<>();
 
     private MutableLiveData<String> category = new MutableLiveData<>();
 
@@ -66,6 +67,14 @@ public class AddReviewViewModel extends ViewModel {
         this.category.setValue(category);
     }
 
+    public void setHasPicture(Boolean hasPicture) {
+        this.hasPicture.setValue(hasPicture);
+    }
+
+    public boolean hasPicture() {
+        return this.hasPicture.getValue();
+    }
+
     public void postReview() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             DatabaseReference user = mDatabase.child("users")
@@ -82,6 +91,7 @@ public class AddReviewViewModel extends ViewModel {
                     newPostRef.child("likes").setValue(0);
                     newPostRef.child("category").setValue(getCategory().getValue());
                     newPostRef.child("uid").setValue(getUid().getValue());
+                    newPostRef.child("hasPicture").setValue(hasPicture());
                 }
 
                 @Override
