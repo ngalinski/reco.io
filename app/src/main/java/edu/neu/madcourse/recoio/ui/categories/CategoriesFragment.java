@@ -1,5 +1,6 @@
 package edu.neu.madcourse.recoio.ui.categories;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +28,9 @@ public class CategoriesFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private CategoriesRecyclerViewAdapter adapter;
 
-    String[] categories = {"Trending", "Shows/Movies", "Food", "Electronics", "Music", "Other"};
+
+    //TODO - add trending back to the categories
+    String[] categories = {"Shows/Movies", "Food", "Electronics", "Music", "Other"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +42,16 @@ public class CategoriesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         createAdapter();
+        adapter.setItemClickListener(new CategoriesRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(int position, Context context) {
+                Bundle categoryStringBundle = new Bundle();
+                categoryStringBundle.putString("category", categories[position]);
+                NavHostFragment.findNavController(CategoriesFragment.this)
+                        .navigate(R.id.action_navigation_categories_to_categoryFragment,
+                                categoryStringBundle);
+            }
+        });
     }
 
     public void createAdapter() {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="categories_array">
+        <!-- TODO - Add trending back to the categories list -->
         <item>Shows/Movies</item>
         <item>Food</item>
         <item>Electronics</item>

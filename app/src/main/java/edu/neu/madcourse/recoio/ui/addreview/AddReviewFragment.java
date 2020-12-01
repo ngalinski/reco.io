@@ -18,6 +18,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -216,6 +217,8 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                     ? reviewEditText.getText().toString() : "");
             mViewModel.setHasPicture(hasPicture);
             mViewModel.postReview();
+//            NavHostFragment.findNavController(AddReviewFragment.this)
+//                    .navigate(R.id.action_navigation_add_review_to_navigation_newsfeed);
         }
     }
 

@@ -11,7 +11,11 @@
             android:id="@+id/navigation_add_review"
             android:name="edu.neu.madcourse.recoio.ui.addreview.AddReviewFragment"
             android:label="@string/title_add_review"
-            tools:layout="@layout/fragment_add_review" />
+            tools:layout="@layout/fragment_add_review" >
+            <action
+                android:id="@+id/action_navigation_add_review_to_navigation_newsfeed"
+                app:destination="@id/navigation_newsfeed" />
+        </fragment>
         <fragment
             android:id="@+id/navigation_your_lists"
             android:name="edu.neu.madcourse.recoio.ui.yourlists.YourListsFragment"
@@ -32,8 +36,8 @@
             android:label="@string/title_categories"
             tools:layout="@layout/fragment_categories" >
             <action
-                android:id="@+id/action_navigation_categories_to_reviewFragment2"
-                app:destination="@id/reviewFragment" />
+                android:id="@+id/action_navigation_categories_to_categoryFragment"
+                app:destination="@id/categoryFragment" />
         </fragment>
         <fragment
             android:id="@+id/navigation_profile"
@@ -46,12 +50,25 @@
         <fragment
             android:id="@+id/reviewFragment"
             android:name="edu.neu.madcourse.recoio.ui.review.ReviewFragment"
+            android:label="Review"
             tools:layout="@layout/review_fragment">
             <action
                 android:id="@+id/action_reviewFragment_to_navigation_newsfeed"
                 app:destination="@id/navigation_newsfeed" />
             <action
-                android:id="@+id/action_reviewFragment_to_navigation_categories"
+                android:id="@+id/action_reviewFragment_to_categoryFragment"
+                app:destination="@id/categoryFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/categoryFragment"
+            android:name="edu.neu.madcourse.recoio.ui.categories.CategoryFragment"
+            android:label="Category"
+            tools:layout="@layout/fragment_category">
+            <action
+                android:id="@+id/action_categoryFragment_to_reviewFragment"
+                app:destination="@id/reviewFragment" />
+            <action
+                android:id="@+id/action_categoryFragment_to_navigation_categories"
                 app:destination="@id/navigation_categories" />
         </fragment>
     </navigation>

@@ -92,6 +92,11 @@ public class AddReviewViewModel extends ViewModel {
                     newPostRef.child("category").setValue(getCategory().getValue());
                     newPostRef.child("uid").setValue(getUid().getValue());
                     newPostRef.child("hasPicture").setValue(hasPicture());
+                    if (getCategory().getValue() != null) {
+                        DatabaseReference category = mDatabase.child("categories");
+                        category.child(getCategory().getValue()).child(getUid().getValue())
+                                .child("owner").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    }
                 }
 
                 @Override
