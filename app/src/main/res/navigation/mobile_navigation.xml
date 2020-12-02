@@ -50,7 +50,11 @@
             android:id="@+id/navigation_profile"
             android:name="edu.neu.madcourse.recoio.ui.profile.ProfileFragment"
             android:label="@string/title_profile"
-            tools:layout="@layout/fragment_profile" />
+            tools:layout="@layout/fragment_profile" >
+            <action
+                android:id="@+id/action_navigation_profile_to_reviewFragment"
+                app:destination="@id/reviewFragment" />
+        </fragment>
         <action
             android:id="@+id/action_global_loginFragment"
             app:destination="@id/loginFragment" />
@@ -65,6 +69,9 @@
             <action
                 android:id="@+id/action_reviewFragment_to_categoryFragment"
                 app:destination="@id/categoryFragment" />
+            <action
+                android:id="@+id/action_reviewFragment_to_navigation_profile"
+                app:destination="@id/navigation_profile" />
         </fragment>
         <fragment
             android:id="@+id/categoryFragment"
