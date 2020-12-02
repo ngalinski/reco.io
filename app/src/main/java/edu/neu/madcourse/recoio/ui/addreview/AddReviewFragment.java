@@ -36,6 +36,12 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -53,6 +59,8 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
 
     static final int REQUEST_IMAGE_CAPTURE = 103;
 
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference reviews = databaseReference.child("reviews");
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference reviewImages = storage.getReference().child("reviewPictures");
 
@@ -186,7 +194,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
 
     public void postReviewPressed() {
         if (!productSearchEditText.getText().toString().equals("")) {
-            Date date = Calendar.getInstance().getTime();
+            final Date date = Calendar.getInstance().getTime();
             boolean hasPicture = false;
             // this code is based off of the google firebase docs code
             if (newProductBitMap != null) {
@@ -209,14 +217,51 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                     }
                 });
             }
-            mViewModel.setUid(String.valueOf(date.getTime()));
-            mViewModel.setThingToReview(productSearchEditText.getText().toString());
-            mViewModel.setRating(ratingBar.getRating());
-            mViewModel.setCategory(categoriesSpinner.getSelectedItem().toString());
-            mViewModel.setReview(!reviewEditText.getText().toString().isEmpty()
+
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                final DatabaseReference user = databaseReference.child("users")
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                final boolean finalHasPicture = hasPicture;
+                user.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        DatabaseReference newPostRef = reviews.child(String.valueOf(date.getTime()));
+                        newPostRef.child("product").setValue(productSearchEditText.getText().toString());
+                        newPostRef.child("reviewText").setValue(!reviewEditText.getText().toString().isEmpty()
                     ? reviewEditText.getText().toString() : "");
-            mViewModel.setHasPicture(hasPicture);
-            mViewModel.postReview();
+                        newPostRef.child("rating").setValue(String.valueOf(ratingBar.getRating()));
+                        newPostRef.child("owner").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        newPostRef.child("ownerName").setValue(snapshot.child("name").getValue());
+                        newPostRef.child("likes").setValue(0);
+                        newPostRef.child("category").setValue(categoriesSpinner.getSelectedItem().toString());
+                        newPostRef.child("uid").setValue(String.valueOf(date.getTime()));
+                        newPostRef.child("hasPicture").setValue(finalHasPicture);
+
+                        DatabaseReference category = databaseReference.child("categories");
+                        category.child(categoriesSpinner.getSelectedItem().toString())
+                                .child(String.valueOf(date.getTime()))
+                                .child("owner").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                        DatabaseReference userReviews = user.child("reviews");
+                        userReviews.child(String.valueOf(date.getTime())).setValue(true);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+//            mViewModel.setUid(String.valueOf(date.getTime()));
+//            mViewModel.setThingToReview(productSearchEditText.getText().toString());
+//            mViewModel.setRating(ratingBar.getRating());
+//            mViewModel.setCategory(categoriesSpinner.getSelectedItem().toString());
+//            mViewModel.setReview(!reviewEditText.getText().toString().isEmpty()
+//                    ? reviewEditText.getText().toString() : "");
+//            mViewModel.setHasPicture(hasPicture);
+//            mViewModel.postReview();
 //            NavHostFragment.findNavController(AddReviewFragment.this)
 //                    .navigate(R.id.action_navigation_add_review_to_navigation_newsfeed);
         }

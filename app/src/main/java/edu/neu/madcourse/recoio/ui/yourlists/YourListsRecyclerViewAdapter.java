@@ -1,4 +1,4 @@
-package edu.neu.madcourse.recoio.ui.categories;
+package edu.neu.madcourse.recoio.ui.yourlists;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,11 +23,11 @@ import com.google.firebase.storage.StorageReference;
 
 import edu.neu.madcourse.recoio.R;
 
-public class CategoriesRecyclerViewAdapter
-        extends RecyclerView.Adapter<CategoriesRecyclerViewAdapter.ViewHolder> {
+public class YourListsRecyclerViewAdapter
+        extends RecyclerView.Adapter<YourListsRecyclerViewAdapter.ViewHolder> {
 
     private final DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference();
-    private final DatabaseReference categoriesReference = firebaseDatabase.child("categories");
+    private final DatabaseReference listsReference = firebaseDatabase.child("lists");
     private final StorageReference pictureStorageRef = FirebaseStorage.getInstance().getReference()
             .child("reviewPictures");
 
@@ -35,17 +35,17 @@ public class CategoriesRecyclerViewAdapter
         void onItemClick(int position, Context context);
     }
 
-    private CategoriesRecyclerViewAdapter.ItemClickListener itemClickListener;
+    private YourListsRecyclerViewAdapter.ItemClickListener itemClickListener;
 
 
-    public void setItemClickListener(CategoriesRecyclerViewAdapter.ItemClickListener listener) {
+    public void setItemClickListener(YourListsRecyclerViewAdapter.ItemClickListener listener) {
         itemClickListener = listener;
     }
 
 
     private final String[] categories;
 
-    public CategoriesRecyclerViewAdapter(String[] categories) {
+    public YourListsRecyclerViewAdapter(String[] categories) {
         this.categories = categories;
     }
 
@@ -58,22 +58,20 @@ public class CategoriesRecyclerViewAdapter
         return new ViewHolder(category, itemClickListener);
     }
 
-    // TODO: add photos in category lists
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         String categoryString = categories[position];
         holder.categoryTextView.setText(categories[position]);
         final Integer[] reviewCounter = {0};
 
-        Query reviewsQuery = categoriesReference.child(categoryString).limitToFirst(4);
+        Query reviewsQuery = listsReference.child(categoryString).limitToFirst(4);
 
         reviewsQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     reviewCounter[0]++;
                     String pictureUID = snapshot.getKey();
-                assert pictureUID != null;
-                StorageReference pictureReference = pictureStorageRef.child(pictureUID);
+                    StorageReference pictureReference = pictureStorageRef.child(pictureUID);
                     switch (reviewCounter[0].toString()) {
                         case "1":
                             Glide.with(holder.reviewOneImgView).load(pictureReference)

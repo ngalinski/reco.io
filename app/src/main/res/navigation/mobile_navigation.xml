@@ -20,7 +20,14 @@
             android:id="@+id/navigation_your_lists"
             android:name="edu.neu.madcourse.recoio.ui.yourlists.YourListsFragment"
             android:label="@string/title_lists"
-            tools:layout="@layout/fragment_your_lists" />
+            tools:layout="@layout/fragment_your_lists" >
+            <action
+                android:id="@+id/action_navigation_your_lists_to_addListFragment"
+                app:destination="@id/addListFragment" />
+            <action
+                android:id="@+id/action_navigation_your_lists_to_listFragment"
+                app:destination="@id/listFragment" />
+        </fragment>
         <fragment
             android:id="@+id/navigation_newsfeed"
             android:name="edu.neu.madcourse.recoio.ui.newsfeed.NewsfeedFragment"
@@ -70,6 +77,24 @@
             <action
                 android:id="@+id/action_categoryFragment_to_navigation_categories"
                 app:destination="@id/navigation_categories" />
+        </fragment>
+        <fragment
+            android:id="@+id/addListFragment"
+            android:name="edu.neu.madcourse.recoio.ui.yourlists.AddListFragment"
+            android:label="Create a List"
+            tools:layout="@layout/fragment_add_list">
+            <action
+                android:id="@+id/action_addListFragment_to_navigation_your_lists"
+                app:destination="@id/navigation_your_lists" />
+        </fragment>
+        <fragment
+            android:id="@+id/listFragment"
+            android:name="edu.neu.madcourse.recoio.ui.yourlists.ListFragment"
+            android:label="fragment_list"
+            tools:layout="@layout/fragment_list" >
+            <action
+                android:id="@+id/action_listFragment_to_navigation_your_lists"
+                app:destination="@id/navigation_your_lists" />
         </fragment>
     </navigation>
     <fragment
