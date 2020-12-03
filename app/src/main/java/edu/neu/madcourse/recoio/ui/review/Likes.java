@@ -1,18 +1,28 @@
 package edu.neu.madcourse.recoio.ui.review;
 
 import android.view.View;
+import android.widget.ImageView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.neu.madcourse.recoio.R;
+
+// TODO: finish implementing this class
 public class Likes {
 
+    private ImageView btnLike;
+
     public void displayNumberOfLikes(String postId, String currentUserId){
-        DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference().child('Post').child(postId);
-        likesRef.addValueEventListener(new ValueEventListener(){
+        DatabaseReference likes = FirebaseDatabase.getInstance().getReference().child('Post').child(postId);
+        final FirebaseUser userId = FirebaseAuth.getInstance().getCurrentUser();
+        btnLike = findViewById(R.id.likeImageView);
+        likes.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -34,7 +44,8 @@ public class Likes {
     }
 
     public void onLikeClicked(View v, String postId, String userId){
-        DatabaseReference likes = FirebaseDatabase.getInstance().getReference().child('Post').child(postId).child("likes");
+        final DatabaseReference likes = FirebaseDatabase.getInstance().getReference().child('Post').child(postId).child("likes");
+        final FirebaseUser like_user = FirebaseAuth.getInstance().getCurrentUser();
         likes.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -45,10 +56,10 @@ public class Likes {
                 boolean isLiked = btnLike.isSelected();
                 if(isLiked){
                     // unlike
-                    likes.set(numLikes-1);
+                    likes.setValue(numLikes-1);
                 }else {
                     // like
-                    likes.set(numLikes+1);
+                    likes.setValue(numLikes+1);
                 }
             }
 

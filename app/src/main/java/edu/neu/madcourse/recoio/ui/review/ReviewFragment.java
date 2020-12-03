@@ -55,6 +55,7 @@ public class ReviewFragment extends Fragment {
     TextView reviewTextView;
     EditText commentEditText;
     Button commentButton;
+    TextView numLikes;
 
     String reviewUID;
     ArrayList<Comment> commentsArrayList;
@@ -92,6 +93,8 @@ public class ReviewFragment extends Fragment {
         ratingBar = requireView().findViewById(R.id.reviewRatingBar);
         commentButton = requireView().findViewById(R.id.commentButton);
         commentEditText = requireView().findViewById(R.id.commentEditText);
+        // TODO: add number of likes to review page
+        numLikes = requireView().findViewById();
 
         commentsArrayList = new ArrayList<>();
 
