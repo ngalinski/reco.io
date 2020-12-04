@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.loginFragment,
                 R.id.navigation_newsfeed, R.id.navigation_categories, R.id.navigation_add_review,
                 R.id.navigation_your_lists, R.id.navigation_profile)
                 .build();
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-
         return navController.navigateUp() || super.onSupportNavigateUp();
     }
 }

@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/loginTitleTextView"
                 android:ems="10"
-                android:hint="Enter an email address"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress" />
 
             <Button
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/emailEditText"
                 android:ems="10"
-                android:hint="Enter a password"
+                android:hint="@string/password"
                 android:inputType="textPassword" />
 
             <TextView
