@@ -125,12 +125,12 @@ public class SignUpFragment extends Fragment {
     }
 
     boolean isEmail() {
-        return (!TextUtils.isEmpty(emailEditText.toString()) &&
-                Patterns.EMAIL_ADDRESS.matcher(emailEditText.toString()).matches());
+        return (!TextUtils.isEmpty(emailEditText.getText().toString()) &&
+                Patterns.EMAIL_ADDRESS.matcher(emailEditText.getText().toString()).matches());
     }
 
     boolean checkPassword() {
-        return passwordEditText.toString().equals(passwordVerify.toString());
+        return passwordEditText.getText().toString().equals(passwordVerify.getText().toString());
     }
 
 //    public void getUsernameAvailability(String newUsername) {

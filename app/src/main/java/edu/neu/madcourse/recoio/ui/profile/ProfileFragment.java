@@ -41,6 +41,7 @@ public class ProfileFragment extends Fragment {
     private ProfileViewModel mViewModel;
 
     private ImageView settingsImageView;
+    private TextView userNameTextView;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private RecyclerView profileReviewRecyclerView;
@@ -64,23 +65,11 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        final TextView profileTextView = requireView().findViewById(R.id.profile_name);
-
-        mViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                profileTextView.setText(s);
-            }
-        });
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         settingsImageView = requireView().findViewById(R.id.settingsImageView);
+        userNameTextView = requireView().findViewById(R.id.profile_name);
+
         reviews = new ArrayList<>();
 
 
@@ -88,6 +77,18 @@ public class ProfileFragment extends Fragment {
         final DatabaseReference currUser = usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         final DatabaseReference currUserReviews = currUser.child("reviews");
         final DatabaseReference reviewsRef = databaseReference.child("reviews");
+
+        currUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userNameTextView.setText((String) snapshot.child("name").getValue());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         currUserReviews.addChildEventListener(new ChildEventListener() {
             @Override

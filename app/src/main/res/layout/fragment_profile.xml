@@ -35,7 +35,8 @@
                 android:background="@drawable/solid_circle"
                 android:padding="3dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_profile" />
+                android:src="@drawable/ic_profile"
+                app:srcCompat="@drawable/ic_profile" />
 
         </RelativeLayout>
 
@@ -161,11 +162,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userReviews"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="316dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linlay1" />
+        app:layout_constraintTop_toBottomOf="@+id/linlay1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
