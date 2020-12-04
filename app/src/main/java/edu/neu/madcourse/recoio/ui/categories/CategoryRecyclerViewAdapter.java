@@ -51,7 +51,9 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Review review = reviews.get(position);
+        System.out.println(review);
         holder.productTextView.setText(review.getProductTitle());
+        System.out.println(review.getRating());
         holder.productRatingBar.setRating((Float.parseFloat(review.getRating())));
         holder.reviewTextView.setText(review.getReviewText());
         holder.reviewerTextView.setText(String.format(Locale.getDefault(),

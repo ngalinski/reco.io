@@ -75,7 +75,7 @@ public class CategoryFragment extends Fragment {
         categoryReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                reviewsRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                reviewsRef.child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Review newReview = new Review(
@@ -86,6 +86,7 @@ public class CategoryFragment extends Fragment {
                                 (String) snapshot.child("ownerName").getValue(),
                                 (Boolean) snapshot.child("hasPicture").getValue()
                         );
+                        System.out.println(newReview);
                         reviews.add(newReview);
                         adapter.notifyDataSetChanged();
                     }

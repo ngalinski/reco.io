@@ -2,7 +2,7 @@
 <resources>
     <string-array name="categories_array">
         <!-- TODO - Add trending back to the categories list -->
-        <item>Shows/Movies</item>
+        <item>Shows and Movies</item>
         <item>Food</item>
         <item>Electronics</item>
         <item>Music</item>

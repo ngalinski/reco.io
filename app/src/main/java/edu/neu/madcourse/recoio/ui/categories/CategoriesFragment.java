@@ -30,7 +30,7 @@ public class CategoriesFragment extends Fragment {
 
 
     //TODO - add trending back to the categories
-    String[] categories = {"Shows/Movies", "Food", "Electronics", "Music", "Other"};
+    String[] categories = {"Shows and Movies", "Food", "Electronics", "Music", "Other"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

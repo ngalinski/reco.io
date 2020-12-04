@@ -94,7 +94,7 @@ public class ReviewFragment extends Fragment {
         commentButton = requireView().findViewById(R.id.commentButton);
         commentEditText = requireView().findViewById(R.id.commentEditText);
         // TODO: add number of likes to review page
-        numLikes = requireView().findViewById();
+//        numLikes = requireView().findViewById();
 
         commentsArrayList = new ArrayList<>();
 

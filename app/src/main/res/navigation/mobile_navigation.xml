@@ -107,7 +107,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="edu.neu.madcourse.recoio.ui.login.LoginFragment"
-        android:label="Login Fragment"
+        android:label="Reco.io"
         tools:layout="@layout/login_fragment">
         <action
             android:id="@+id/action_loginFragment_to_app_navigation"
@@ -119,8 +119,8 @@
     <fragment
         android:id="@+id/signUpFragment"
         android:name="edu.neu.madcourse.recoio.ui.signup.SignUpFragment"
-        android:label="sign_up_fragment"
-        tools:layout="@layout/sign_up_fragment" >
+        android:label="Reco.io"
+        tools:layout="@layout/sign_up_fragment">
         <action
             android:id="@+id/action_signUpFragment_to_app_navigation"
             app:destination="@id/app_navigation" />
