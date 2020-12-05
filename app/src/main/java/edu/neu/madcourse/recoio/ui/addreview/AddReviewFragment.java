@@ -1,25 +1,9 @@
 package edu.neu.madcourse.recoio.ui.addreview;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +17,14 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,7 +53,6 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference reviewImages = storage.getReference().child("reviewPictures");
 
-    private AddReviewViewModel mViewModel;
 
     private EditText productSearchEditText;
     private RatingBar ratingBar;
@@ -90,8 +78,6 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(AddReviewViewModel.class);
-
     }
 
     @Override
@@ -152,43 +138,6 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
-//    private void setupCameraPermission() {
-//        int permission = ContextCompat.checkSelfPermission(requireContext(),
-//                Manifest.permission.CAMERA);
-//        if (permission != PackageManager.PERMISSION_GRANTED) {
-//            if(ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
-//                    Manifest.permission.CAMERA)) {
-//                AlertDialog.Builder builder= new AlertDialog.Builder(requireContext());
-//                builder.setMessage("Adding a picture will boost your likes!")
-//                        .setTitle("Camera Permission");
-//                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        makeCameraPermissionRequest();
-//                    }
-//                });
-//            }
-//        }
-//    }
-
-//    protected void makeCameraPermissionRequest() {
-//        ActivityCompat.requestPermissions(requireActivity(), new String[]{
-//                Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-//    }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-////        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == CAMERA_REQUEST_CODE) {
-//            if (grantResults.length == 0
-//                    || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-//                Snackbar.make(requireView(), "Unable to access camera - permission required",
-//                        Snackbar.LENGTH_SHORT).show();
-//            } else {
-//                takePicture();
-//            }
-//        }
-//    }
 
 
 
@@ -232,7 +181,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                         newPostRef.child("rating").setValue(String.valueOf(ratingBar.getRating()));
                         newPostRef.child("owner").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         newPostRef.child("ownerName").setValue(snapshot.child("name").getValue());
-                        newPostRef.child("likes").setValue(0);
+                        newPostRef.child("likeCount").setValue(0);
                         newPostRef.child("category").setValue(categoriesSpinner.getSelectedItem().toString());
                         newPostRef.child("uid").setValue(String.valueOf(date.getTime()));
                         newPostRef.child("hasPicture").setValue(finalHasPicture);
@@ -245,6 +194,9 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                         DatabaseReference userReviews = user.child("reviews");
                         userReviews.child(String.valueOf(date.getTime())).setValue(true);
 
+                        NavHostFragment.findNavController(AddReviewFragment.this)
+                                .navigate(R.id.navigation_newsfeed);
+
                     }
 
                     @Override
@@ -252,18 +204,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
 
                     }
                 });
-
             }
-//            mViewModel.setUid(String.valueOf(date.getTime()));
-//            mViewModel.setThingToReview(productSearchEditText.getText().toString());
-//            mViewModel.setRating(ratingBar.getRating());
-//            mViewModel.setCategory(categoriesSpinner.getSelectedItem().toString());
-//            mViewModel.setReview(!reviewEditText.getText().toString().isEmpty()
-//                    ? reviewEditText.getText().toString() : "");
-//            mViewModel.setHasPicture(hasPicture);
-//            mViewModel.postReview();
-//            NavHostFragment.findNavController(AddReviewFragment.this)
-//                    .navigate(R.id.action_navigation_add_review_to_navigation_newsfeed);
         }
     }
 

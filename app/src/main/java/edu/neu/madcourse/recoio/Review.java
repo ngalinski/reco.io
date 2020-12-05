@@ -6,17 +6,18 @@ public class Review {
     private String rating;
     private String reviewText;
     private String reviewer;
-    private Integer likes;
+    private Long likeCount;
     private Boolean hasPicture;
 
     public Review(String uid, String productTitle, String rating, String reviewText, String reviewer,
-                  Boolean hasPicture) {
+                  Boolean hasPicture, Long likeCount) {
         this.productTitle = productTitle;
         this.rating = rating;
         this.reviewText = reviewText;
         this.reviewer = reviewer;
         this.uid = uid;
         this.hasPicture = hasPicture;
+        this.likeCount = likeCount;
     }
 
     public Boolean hasPicture() {
@@ -35,12 +36,12 @@ public class Review {
         return uid;
     }
 
-    public Integer getLikes() {
-        return likes;
+    public Long getLikeCount() {
+        return likeCount;
     }
 
-    public void setLikes(Integer likes) {
-        this.likes = likes;
+    public void setLikeCount(Long likeCount) {
+        this.likeCount = likeCount;
     }
 
     public String getProductTitle() {

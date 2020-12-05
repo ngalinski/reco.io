@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +31,7 @@ public class CategoriesFragment extends Fragment {
 
 
     //TODO - add trending back to the categories
-    String[] categories = {"Shows and Movies", "Food", "Electronics", "Music", "Other"};
+    String[] categories = {"Shows and Movies", "Food", "Electronics", "Music", "Books", "Other"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class CategoriesFragment extends Fragment {
 
     public void createAdapter() {
         categoriesRecyclerView = requireView().findViewById(R.id.categoriesRecyclerView);
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new GridLayoutManager(getActivity(), 2);
         categoriesRecyclerView.setLayoutManager(layoutManager);
         adapter = new CategoriesRecyclerViewAdapter(categories);
         categoriesRecyclerView.setAdapter(adapter);

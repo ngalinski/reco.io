@@ -11,11 +11,7 @@
             android:id="@+id/navigation_add_review"
             android:name="edu.neu.madcourse.recoio.ui.addreview.AddReviewFragment"
             android:label="@string/title_add_review"
-            tools:layout="@layout/fragment_add_review" >
-            <action
-                android:id="@+id/action_navigation_add_review_to_navigation_newsfeed"
-                app:destination="@id/navigation_newsfeed" />
-        </fragment>
+            tools:layout="@layout/fragment_add_review" />
         <fragment
             android:id="@+id/navigation_your_lists"
             android:name="edu.neu.madcourse.recoio.ui.yourlists.YourListsFragment"

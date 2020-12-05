@@ -30,16 +30,21 @@
             android:isIndicator="true"
             style="?android:ratingBarStyleSmall"/>
 
-        <ImageView
-            android:id="@+id/productImageView"
+        <androidx.cardview.widget.CardView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:layout_alignParentEnd="true"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_below="@+id/productTitleTextView"
+            app:cardCornerRadius="50dp">
+            <ImageView
+                android:id="@+id/productImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                tools:srcCompat="@tools:sample/avatars"
+                android:contentDescription="image of review" />
+        </androidx.cardview.widget.CardView>
+
 
         <TextView
             android:id="@+id/productReviewTextView"
@@ -61,7 +66,16 @@
             android:layout_height="20dp"
             android:layout_below="@id/reviewerTextView"
             android:layout_marginTop="8dp"
-            android:src="@drawable/ic_like" />
+            android:src="@drawable/ic_not_liked" />
+
+        <TextView
+            android:id="@+id/likeCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_toEndOf="@+id/likeImageView"
+            android:layout_below="@+id/reviewerTextView"
+            android:layout_margin="8dp"/>
 
         <ImageView
             android:id="@+id/commentsImageView"
@@ -69,7 +83,8 @@
             android:layout_height="20dp"
             android:layout_below="@id/reviewerTextView"
             android:layout_margin="8dp"
-            android:layout_toEndOf="@id/likeImageView"
+            android:layout_toEndOf="@id/likeCountTextView"
             android:src="@drawable/ic_comments" />
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

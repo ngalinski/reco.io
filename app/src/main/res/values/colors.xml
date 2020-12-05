@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <!-- colors generated from https://flatuicolors.com/palette/ca-->
+    <color name="colorPrimary">#1dd1a1</color>
+    <color name="colorPrimaryDark">#10ac84</color>
+    <color name="colorAccent">#ff6b6b</color>
+
+<!--    <color name="colorPrimary">@color/gradEnd</color>-->
+<!--    <color name="colorPrimaryDark">@color/gradStart</color>-->
+<!--    <color name="colorAccent">@color/gradEnd</color>-->
 
     <color name="solidCircle">#AAFFFFFF</color>
     <color name="circleBorder">#50FFFFFF</color>
-    <color name="gradEnd">#67EFC8</color>
-    <color name="gradStart">#63C9FF</color>
-    <color name="followersBg">#65DCE5</color>
-    <color name="followingBg">#49BEFF</color>
+<!--    these are the original gradients for the profile page-->
+<!--    <color name="gradEnd">#67EFC8</color>-->
+<!--    <color name="gradStart">#63C9FF</color>-->
+    <color name="gradEnd">#1dd1a1</color>
+    <color name="gradStart">#1dd1a1</color>
+    <!-- original follower and following bgcolors -->
+<!--    <color name="followersBg">#65DCE5</color>-->
+<!--    <color name="followingBg">#49BEFF</color>-->
+    <color name="followersBg">#10ac84</color>
+    <color name="followingBg">#ff6b6b</color>
     <color name="grey">#E5E5E5</color>
     <color name="white">#FFFFFF</color>
+
+
+    <color name="categoriesBackgroundColor">#8395a7</color>
 </resources>

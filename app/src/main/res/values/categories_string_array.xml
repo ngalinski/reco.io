@@ -6,6 +6,7 @@
         <item>Food</item>
         <item>Electronics</item>
         <item>Music</item>
+        <item>Books</item>
         <item>Other</item>
     </string-array>
 </resources>

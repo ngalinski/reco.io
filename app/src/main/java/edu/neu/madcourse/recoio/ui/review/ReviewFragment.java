@@ -48,6 +48,8 @@ public class ReviewFragment extends Fragment {
     private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     private StorageReference reviewPicturesReference = storageReference.child("reviewPictures");
 
+    private ValueEventListener reviewEventListener;
+
     private TextView productTextName;
     private TextView reviewerNameTextView;
     ImageView productImage;
@@ -99,26 +101,26 @@ public class ReviewFragment extends Fragment {
         commentsArrayList = new ArrayList<>();
 
         reviewUID = getArguments().getString("uid");
-        reviews.child(reviewUID).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        productTextName.setText((String)snapshot.child("product").getValue());
-                        reviewTextView.setText((String) snapshot.child("reviewText").getValue());
-                        ratingBar.setRating(Float.parseFloat((String) snapshot.child("rating").getValue()));
-                        reviewerNameTextView.setText((String) snapshot.child("ownerName").getValue());
-                        if ((Boolean) snapshot.child("hasPicture").getValue()) {
-                            StorageReference pictureRef = reviewPicturesReference.child(reviewUID);
-                            Glide.with(requireView()).load(pictureRef).into(productImage);
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
+        reviewEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                productTextName.setText((String)snapshot.child("product").getValue());
+                reviewTextView.setText((String) snapshot.child("reviewText").getValue());
+                ratingBar.setRating(Float.parseFloat((String) snapshot.child("rating").getValue()));
+                reviewerNameTextView.setText((String) snapshot.child("ownerName").getValue());
+                if ((Boolean) snapshot.child("hasPicture").getValue()) {
+                    StorageReference pictureRef = reviewPicturesReference.child(reviewUID);
+                    Glide.with(requireView()).load(pictureRef).into(productImage);
                 }
-        );
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        reviews.child(reviewUID).addValueEventListener(reviewEventListener);
 
         createAdapter();
         reviews.child(reviewUID).child("comments").addChildEventListener(
@@ -158,6 +160,12 @@ public class ReviewFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        reviews.child(reviewUID).removeEventListener(reviewEventListener);
     }
 
     public void postComment() {

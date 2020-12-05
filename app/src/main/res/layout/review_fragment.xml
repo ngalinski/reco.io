@@ -11,7 +11,7 @@
         android:id="@+id/productNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/reviewRatingBar"
         app:layout_constraintTop_toTopOf="@+id/productImage"
         tools:text="@tools:sample/first_names" />
@@ -20,6 +20,7 @@
         android:id="@+id/reviewerNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/reviewRatingBar"
         app:layout_constraintStart_toStartOf="@+id/reviewRatingBar"
         app:layout_constraintTop_toBottomOf="@+id/productNameTextView"
@@ -27,13 +28,14 @@
 
     <ImageView
         android:id="@+id/productImage"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="@+id/reviewRatingBar"
+        android:contentDescription="Product Image View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/reviewRatingBar"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars"
-        android:contentDescription="Product Image View" />
+        tools:src="@tools:sample/avatars" />
 
     <RatingBar
         android:id="@+id/reviewRatingBar"
