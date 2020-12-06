@@ -39,7 +39,7 @@ import java.util.Date;
 import edu.neu.madcourse.recoio.Comment;
 import edu.neu.madcourse.recoio.R;
 
-// TODO: make keyboard go away easier + exit out of review once posted
+// TODO: exit out of review once posted
 public class ReviewFragment extends Fragment {
 
     private ReviewViewModel mViewModel;
@@ -82,7 +82,6 @@ public class ReviewFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     @Override

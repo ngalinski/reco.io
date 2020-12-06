@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import edu.neu.madcourse.recoio.R;
 
 public class LoginViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
 
     private MutableLiveData<String> email = new MutableLiveData<>();
     private MutableLiveData<String> password = new MutableLiveData<>();

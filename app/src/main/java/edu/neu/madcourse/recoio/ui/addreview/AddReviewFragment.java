@@ -43,7 +43,6 @@ import edu.neu.madcourse.recoio.R;
 
 import static android.app.Activity.RESULT_OK;
 
-// TODO: add a photo
 public class AddReviewFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     static final int REQUEST_IMAGE_CAPTURE = 103;

@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-// TODO: make categories visually appealing
 public class CategoriesViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;

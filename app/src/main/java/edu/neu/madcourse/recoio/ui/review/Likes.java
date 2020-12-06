@@ -13,7 +13,7 @@
 //
 //import edu.neu.madcourse.recoio.R;
 //
-//// TODO: finish implementing this class
+
 //public class Likes {
 //
 //    private ImageView btnLike;
