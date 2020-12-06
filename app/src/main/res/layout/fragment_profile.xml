@@ -64,7 +64,7 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/settingsImageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -73,7 +73,8 @@
             android:layout_marginRight="15dp"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_settings" />
+            android:src="@drawable/ic_settings"
+            android:background=""/>
 
     </RelativeLayout>
 

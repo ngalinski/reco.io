@@ -15,10 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -40,7 +45,7 @@ public class ProfileFragment extends Fragment {
 
     private ProfileViewModel mViewModel;
 
-    private ImageView settingsImageView;
+    private ImageButton settingsImageView;
     private TextView userNameTextView;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -142,11 +147,31 @@ public class ProfileFragment extends Fragment {
         settingsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAuth.getCurrentUser() != null) {
-                    mAuth.signOut();
-                    NavHostFragment.findNavController(ProfileFragment.this)
-                            .navigate(R.id.action_global_loginFragment);
-                }
+                final PopupMenu prof_dropdown = new PopupMenu(ProfileFragment.this, settingsImageView);
+                prof_dropdown.getMenuInflater().inflate(R.menu.profile_dropdown_menu, prof_dropdown.getMenu());
+
+                prof_dropdown.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menu_edit:
+                                // TODO: add profile edit page
+                                return true;
+                            case R.id.menu_privacy:
+                                // TODO: fix this navigation
+                               // NavHostFragment.findNavController(ProfileFragment.this)
+                                 //       .navigate(R.id.action_navigation_profile_to_privacy);
+                                return true;
+                            case R.id.menu_logout:
+                                if (mAuth.getCurrentUser() != null) {
+                                    mAuth.signOut();
+                                    NavHostFragment.findNavController(ProfileFragment.this)
+                                            .navigate(R.id.action_global_loginFragment);
+                                }
+                            default:
+                                prof_dropdown.show();
+                        }
+                    return true;}
+                });
             }
         });
 
