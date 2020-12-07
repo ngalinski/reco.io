@@ -41,6 +41,9 @@
             <action
                 android:id="@+id/action_navigation_categories_to_categoryFragment"
                 app:destination="@id/categoryFragment" />
+            <action
+                android:id="@+id/action_navigation_categories_to_searchFragment"
+                app:destination="@id/searchFragment" />
         </fragment>
         <fragment
             android:id="@+id/navigation_profile"
@@ -98,6 +101,15 @@
             <action
                 android:id="@+id/action_listFragment_to_navigation_your_lists"
                 app:destination="@id/navigation_your_lists" />
+        </fragment>
+        <fragment
+            android:id="@+id/searchFragment"
+            android:name="edu.neu.madcourse.recoio.ui.categories.search.SearchFragment"
+            android:label="fragment_search"
+            tools:layout="@layout/fragment_search" >
+            <action
+                android:id="@+id/action_searchFragment_to_navigation_categories"
+                app:destination="@id/navigation_categories" />
         </fragment>
     </navigation>
     <fragment
