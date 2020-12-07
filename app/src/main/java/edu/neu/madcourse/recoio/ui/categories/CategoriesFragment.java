@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,8 +19,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import edu.neu.madcourse.recoio.R;
+import android.widget.EditText;
+
 
 public class CategoriesFragment extends Fragment {
 
@@ -29,6 +31,8 @@ public class CategoriesFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private CategoriesRecyclerViewAdapter adapter;
 
+    private Button searchButton;
+    private EditText searchText;
 
     //TODO - add trending back to the categories
     String[] categories = {"Shows and Movies", "Food", "Electronics", "Music", "Books", "Other"};
@@ -43,6 +47,21 @@ public class CategoriesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         createAdapter();
+        searchText = requireView().findViewById(R.id.SearchText);
+        searchButton = requireView().findViewById(R.id.SearchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!searchText.getText().toString().equals("")){
+                    Bundle searchStringBundle = new Bundle();
+                    searchStringBundle.putString("searchText", searchText.getText().toString());
+                    NavHostFragment.findNavController(CategoriesFragment.this)
+                            .navigate(R.id.action_navigation_categories_to_searchFragment,
+                                    searchStringBundle);
+                }
+            }
+        });
+
         adapter.setItemClickListener(new CategoriesRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onItemClick(int position, Context context) {
