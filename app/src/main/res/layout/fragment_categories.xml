@@ -30,7 +30,7 @@
         android:layout_marginEnd="1dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Search..."
         app:layout_constraintEnd_toStartOf="@+id/SearchButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

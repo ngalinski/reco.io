@@ -147,7 +147,7 @@ public class ProfileFragment extends Fragment {
         settingsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final PopupMenu prof_dropdown = new PopupMenu(ProfileFragment.this, settingsImageView);
+                final PopupMenu prof_dropdown = new PopupMenu(requireContext(), settingsImageView);
                 prof_dropdown.getMenuInflater().inflate(R.menu.profile_dropdown_menu, prof_dropdown.getMenu());
 
                 prof_dropdown.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

@@ -105,8 +105,8 @@
         <fragment
             android:id="@+id/searchFragment"
             android:name="edu.neu.madcourse.recoio.ui.categories.search.SearchFragment"
-            android:label="fragment_search"
-            tools:layout="@layout/fragment_search" >
+            android:label="Search results"
+            tools:layout="@layout/fragment_search">
             <action
                 android:id="@+id/action_searchFragment_to_navigation_categories"
                 app:destination="@id/navigation_categories" />
