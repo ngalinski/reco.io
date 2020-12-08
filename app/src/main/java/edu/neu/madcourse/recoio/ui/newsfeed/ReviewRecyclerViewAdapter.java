@@ -1,12 +1,15 @@
 package edu.neu.madcourse.recoio.ui.newsfeed;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +24,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -34,12 +43,16 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
     }
 
     private final ArrayList<Review> reviews;
+    private String currentUserName;
     private ItemClickListener itemClickListener;
     private final StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     private final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference usersReference = databaseReference.child("users");
 
-    public ReviewRecyclerViewAdapter(ArrayList<Review> reviews) {
+
+    public ReviewRecyclerViewAdapter(ArrayList<Review> reviews, String currentUserName) {
         this.reviews = reviews;
+        this.currentUserName = currentUserName;
     }
 
     public void setItemClickListener(ItemClickListener listener) {
@@ -60,6 +73,10 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
         final boolean[] isLiked = new boolean[1];
         final Review review = reviews.get(position);
 
+        if (review.getUid() == null) {
+            return;
+        }
+
         final DatabaseReference likesReference = databaseReference.child("reviews")
                 .child(review.getUid()).child("likes");
         final DatabaseReference reviewReference = databaseReference.child("reviews")
@@ -78,7 +95,7 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
                     .load(reviewImage).into(holder.productImageView);
         }
 
-        reviewReference.addValueEventListener(new ValueEventListener() {
+        reviewReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child("likes").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue() == null ||
@@ -114,6 +131,14 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
                     holder.likeCountTextView.setText(String.valueOf(review.getLikeCount()));
                     holder.likeButtonImageView.setImageResource(R.drawable.ic_like);
 
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendNotification(position);
+                        }
+                    }).start();
+
+
                 } else {
                     likesReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(false);
@@ -124,8 +149,56 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
                 }
             }
         });
+    }
 
+    public void sendNotification(final int position) {
+        final JSONObject payLoad = new JSONObject();
+        final JSONObject notification = new JSONObject();
 
+        usersReference.child(reviews.get(position).getReviewerUID()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot snapshot) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            notification.put("title", "Your review was helpful!");
+                            notification.put("body", String.format(
+                                    "%s liked your post!", currentUserName));
+                            notification.put("sound", "default");
+                            notification.put("badge", "1");
+
+                            payLoad.put("to", (String) snapshot.child("token").getValue());
+                            payLoad.put("priority", "high");
+                            payLoad.put("notification", notification);
+
+                            URL url = new URL("https://fcm.googleapis.com/fcm/send");
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setRequestMethod("POST");
+                            String SERVER_KEY = "key=AAAA3ghhIBE:APA91bG8jTRhUNdgezCDcMtGLLNRHO-pYWpLHfnbNlWMKacu6trrm-hKeNi-YIiIHI5i7sUun71e9R6ncbpGvrr1ubF7iayfZgAebvp80RzPNcRpKtCUGBUqr5WbcrVFZDI_z3H40IKK\t\n";
+                            conn.setRequestProperty("Authorization", SERVER_KEY);
+                            conn.setRequestProperty("Content-Type", "application/json");
+                            conn.setDoOutput(true);
+
+                            OutputStream outputStream = conn.getOutputStream();
+                            outputStream.write(payLoad.toString().getBytes());
+                            outputStream.close();
+
+                            InputStream inputStream = conn.getInputStream();
+                            System.out.println(inputStream.toString());
+                            System.out.println("HELLOOOOO WOOOORLDDD");
+                        } catch (Exception error) {
+                            error.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override

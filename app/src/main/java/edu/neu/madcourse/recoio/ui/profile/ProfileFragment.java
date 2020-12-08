@@ -1,8 +1,5 @@
 package edu.neu.madcourse.recoio.ui.profile;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.os.Bundle;
 
@@ -13,17 +10,13 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -37,9 +30,6 @@ import java.util.ArrayList;
 
 import edu.neu.madcourse.recoio.R;
 import edu.neu.madcourse.recoio.Review;
-import edu.neu.madcourse.recoio.ui.newsfeed.NewsfeedFragment;
-import edu.neu.madcourse.recoio.ui.newsfeed.ReviewRecyclerViewAdapter;
-import edu.neu.madcourse.recoio.ui.signup.SignUpFragment;
 
 public class ProfileFragment extends Fragment {
 
@@ -47,6 +37,8 @@ public class ProfileFragment extends Fragment {
 
     private ImageButton settingsImageView;
     private TextView userNameTextView;
+    private TextView currentUserFollowingCountTV;
+    private TextView currentUserFollowersCountTV;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private RecyclerView profileReviewRecyclerView;
@@ -73,7 +65,9 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         settingsImageView = requireView().findViewById(R.id.settingsImageView);
-        userNameTextView = requireView().findViewById(R.id.profile_name);
+        userNameTextView = requireView().findViewById(R.id.currentUserName);
+        currentUserFollowingCountTV = requireView().findViewById(R.id.currentUserFollowingCountTextView);
+        currentUserFollowersCountTV = requireView().findViewById(R.id.currentUserFollowersCountTextView);
 
         reviews = new ArrayList<>();
 
@@ -83,12 +77,13 @@ public class ProfileFragment extends Fragment {
         final DatabaseReference currUserReviews = currUser.child("reviews");
         final DatabaseReference reviewsRef = databaseReference.child("reviews");
 
-        currUser.addValueEventListener(new ValueEventListener() {
+        currUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userNameTextView.setText((String) snapshot.child("name").getValue());
+                currentUserFollowersCountTV.setText(String.valueOf(snapshot.child("followerCount").getValue()));
+                currentUserFollowingCountTV.setText(String.valueOf(snapshot.child("followingCount").getValue()));
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -108,7 +103,8 @@ public class ProfileFragment extends Fragment {
                                 (String) snapshot.child("review").getValue(),
                                 (String) snapshot.child("ownerName").getValue(),
                                 (Boolean) snapshot.child("hasPicture").getValue(),
-                                (Long) snapshot.child("likeCount").getValue()
+                                (Long) snapshot.child("likeCount").getValue(),
+                                (String) snapshot.child("owner").getValue()
                         );
                         reviews.add(newReview);
                         adapter.notifyDataSetChanged();
@@ -190,7 +186,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public void createAdapter() {
-        profileReviewRecyclerView = requireView().findViewById(R.id.userReviews);
+        profileReviewRecyclerView = requireView().findViewById(R.id.otherUserReviews);
         layoutManager = new LinearLayoutManager(getActivity());
         profileReviewRecyclerView.setLayoutManager(layoutManager);
         adapter = new ProfileReviewRecyclerViewAdapter(reviews);

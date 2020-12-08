@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,6 +61,7 @@ public class ReviewFragment extends Fragment {
     TextView numLikes;
 
     String reviewUID;
+    String otherUserUID;
     ArrayList<Comment> commentsArrayList;
 
     RecyclerView commentsRecyclerView;
@@ -101,6 +103,8 @@ public class ReviewFragment extends Fragment {
 
         reviewUID = getArguments().getString("uid");
 
+
+
         reviewEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -112,6 +116,7 @@ public class ReviewFragment extends Fragment {
                     StorageReference pictureRef = reviewPicturesReference.child(reviewUID);
                     Glide.with(requireView()).load(pictureRef).into(productImage);
                 }
+                otherUserUID = (String) snapshot.child("owner").getValue();
             }
 
             @Override
@@ -156,6 +161,17 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 postComment();
+            }
+        });
+
+        reviewerNameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle otherUserInfoBundle = new Bundle();
+                otherUserInfoBundle.putString("otherUserUID", otherUserUID);
+                NavHostFragment.findNavController(ReviewFragment.this)
+                        .navigate(R.id.action_reviewFragment_to_otherProfileFragment,
+                                otherUserInfoBundle);
             }
         });
 

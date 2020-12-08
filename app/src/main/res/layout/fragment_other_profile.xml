@@ -2,10 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
+    android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.ProfileFragment">
+    tools:context=".ui.otherprofile.OtherProfileFragment">
+
+
+
 
     <RelativeLayout
         android:id="@+id/rellay1"
@@ -25,7 +28,7 @@
             android:background="@drawable/border_circle">
 
             <ImageView
-                android:id="@+id/currentUserProfilePicImageView"
+                android:id="@+id/otherUserPFImageView"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
                 android:layout_marginStart="9dp"
@@ -42,7 +45,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/currentUserName"
+            android:id="@+id/otherUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_pic"
@@ -53,16 +56,15 @@
             android:textColor="@color/white"
             android:textSize="32sp" />
 
-        <ImageButton
-            android:id="@+id/settingsImageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_settings" />
+        <Button
+            android:id="@+id/followButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Follow"
+            android:layout_below="@id/otherUserName"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorAccent"/>
 
     </RelativeLayout>
 
@@ -91,7 +93,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/currentUserFollowersCountTextView"
+                    android:id="@+id/otherUserFollowersCountTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -128,7 +130,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/currentUserFollowingCountTextView"
+                    android:id="@+id/otherUserFollowingCountTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -158,5 +160,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linlay1" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

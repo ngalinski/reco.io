@@ -2,6 +2,7 @@ package edu.neu.madcourse.recoio.ui.signup;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -117,6 +119,10 @@ public class SignUpFragment extends Fragment {
         DatabaseReference newUser = usersReference.child(currentUser.getUid());
         newUser.child("name").setValue(nameEditText.getText().toString());
         newUser.child("email").setValue(currentUser.getEmail());
+        newUser.child("followerCount").setValue(0);
+        newUser.child("followingCount").setValue(0);
+        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(passwordVerify.getWindowToken(), 0);
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.VISIBLE);
         NavHostFragment.findNavController(SignUpFragment.this)

@@ -87,7 +87,6 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
         reviewEditText = requireView().findViewById(R.id.reviewEditText);
         postReviewButton = requireView().findViewById(R.id.postReviewButton);
         categoriesSpinner = requireView().findViewById(R.id.categorySpinner);
-        pictureButton = requireView().findViewById(R.id.pictureButton);
         newProductImageView = requireView().findViewById(R.id.newProductImageView);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.requireContext(),
@@ -103,7 +102,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
             }
         });
 
-        pictureButton.setOnClickListener(new View.OnClickListener() {
+        newProductImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pictureButtonPressed();

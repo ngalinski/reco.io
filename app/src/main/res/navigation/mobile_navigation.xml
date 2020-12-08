@@ -48,8 +48,8 @@
         <fragment
             android:id="@+id/navigation_profile"
             android:name="edu.neu.madcourse.recoio.ui.profile.ProfileFragment"
-            android:label="@string/title_profile"
-            tools:layout="@layout/fragment_profile" >
+            android:label="Your Profile"
+            tools:layout="@layout/fragment_profile">
             <action
                 android:id="@+id/action_navigation_profile_to_reviewFragment"
                 app:destination="@id/reviewFragment" />
@@ -71,6 +71,9 @@
             <action
                 android:id="@+id/action_reviewFragment_to_navigation_profile"
                 app:destination="@id/navigation_profile" />
+            <action
+                android:id="@+id/action_reviewFragment_to_otherProfileFragment"
+                app:destination="@id/otherProfileFragment" />
         </fragment>
         <fragment
             android:id="@+id/categoryFragment"
@@ -111,6 +114,11 @@
                 android:id="@+id/action_searchFragment_to_navigation_categories"
                 app:destination="@id/navigation_categories" />
         </fragment>
+        <fragment
+            android:id="@+id/otherProfileFragment"
+            android:name="edu.neu.madcourse.recoio.ui.otherprofile.OtherProfileFragment"
+            android:label="Reco"
+            tools:layout="@layout/fragment_other_profile" />
     </navigation>
     <fragment
         android:id="@+id/loginFragment"

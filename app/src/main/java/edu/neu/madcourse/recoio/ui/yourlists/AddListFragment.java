@@ -88,7 +88,8 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
                         (String) snapshot.child("review").getValue(),
                         (String) snapshot.child("ownerName").getValue(),
                         (Boolean) snapshot.child("hasPicture").getValue(),
-                        (Long) snapshot.child("likeCount").getValue()
+                        (Long) snapshot.child("likeCount").getValue(),
+                        (String) snapshot.child("owner").getValue()
                 );
                 reviews.add(newReview);
                 adapter.notifyDataSetChanged();

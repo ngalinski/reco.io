@@ -15,11 +15,16 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -34,6 +39,11 @@ public class NewsfeedFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private ReviewRecyclerViewAdapter adapter;
 
+    private final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    ValueEventListener currentUserEventListener;
+
+    private String currentUserName;
+
     private ArrayList<Review> reviews;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,37 +57,61 @@ public class NewsfeedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         reviews = new ArrayList<>();
-        final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
+        final DatabaseReference reviewsRef = databaseReference.child("reviews");
+        final DatabaseReference usersRef = databaseReference.child("users");
 
-        ChildEventListener childEventListener = new ChildEventListener() {
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Review newReview = new Review(
-                        (String) snapshot.child("uid").getValue(),
-                        (String) snapshot.child("product").getValue(),
-                        (String) snapshot.child("rating").getValue(),
-                        (String) snapshot.child("review").getValue(),
-                        (String) snapshot.child("ownerName").getValue(),
-                        (Boolean) snapshot.child("hasPicture").getValue(),
-                        (Long) snapshot.child("likeCount").getValue()
-                );
-                reviews.add(newReview);
-                adapter.notifyDataSetChanged();
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                String token = task.getResult();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference users = database.getReference("users");
+                users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("token").setValue(token);
             }
+        });
 
+        currentUserEventListener = new ValueEventListener() {
             @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentUserName = (String) snapshot.child("name").getValue();
+                createAdapter();
+                adapter.setItemClickListener(new ReviewRecyclerViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(int position, Context context) {
+                        Bundle reviewUID = new Bundle();
+                        reviewUID.putString("uid", reviews.get(position).getUid());
+                        NavHostFragment.findNavController(NewsfeedFragment.this)
+                                .navigate(R.id.action_navigation_newsfeed_to_reviewFragment, reviewUID);
+                    }
+                });
+                reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot reviewSnapshot: snapshot.getChildren()) {
+                            Review newReview = new Review(
+                                    (String) reviewSnapshot.child("uid").getValue(),
+                                    (String) reviewSnapshot.child("product").getValue(),
+                                    (String) reviewSnapshot.child("rating").getValue(),
+                                    (String) reviewSnapshot.child("review").getValue(),
+                                    (String) reviewSnapshot.child("ownerName").getValue(),
+                                    (Boolean) reviewSnapshot.child("hasPicture").getValue(),
+                                    (Long) reviewSnapshot.child("likeCount").getValue(),
+                                    (String) reviewSnapshot.child("owner").getValue()
+                            );
+                            reviews.add(newReview);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
 
-            }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                    }
+                });
             }
 
             @Override
@@ -85,24 +119,23 @@ public class NewsfeedFragment extends Fragment {
 
             }
         };
-        reviewsRef.addChildEventListener(childEventListener);
-        createAdapter();
-        adapter.setItemClickListener(new ReviewRecyclerViewAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(int position, Context context) {
-                Bundle reviewUID = new Bundle();
-                reviewUID.putString("uid", reviews.get(position).getUid());
-                NavHostFragment.findNavController(NewsfeedFragment.this)
-                        .navigate(R.id.action_navigation_newsfeed_to_reviewFragment, reviewUID);
-            }
-        });
+        usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(currentUserEventListener);
+
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        databaseReference.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .removeEventListener(currentUserEventListener);
     }
 
     public void createAdapter() {
         reviewRecyclerView = requireView().findViewById(R.id.reviewRecyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         reviewRecyclerView.setLayoutManager(layoutManager);
-        adapter = new ReviewRecyclerViewAdapter(reviews);
+        adapter = new ReviewRecyclerViewAdapter(reviews, currentUserName);
         reviewRecyclerView.setAdapter(adapter);
     }
 }

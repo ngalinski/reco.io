@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -66,45 +67,29 @@ public class YourListsRecyclerViewAdapter
 
         Query reviewsQuery = listsReference.child(categoryString).limitToFirst(4);
 
-        reviewsQuery.addChildEventListener(new ChildEventListener() {
+        reviewsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    reviewCounter[0]++;
-                    String pictureUID = snapshot.getKey();
-                    StorageReference pictureReference = pictureStorageRef.child(pictureUID);
-                    switch (reviewCounter[0].toString()) {
-                        case "1":
-                            Glide.with(holder.reviewOneImgView).load(pictureReference)
-                                    .into(holder.reviewOneImgView);
-                            break;
-                        case "2":
-                            Glide.with(holder.reviewTwoImgView).load(pictureReference)
-                                    .into(holder.reviewTwoImgView);
-                            break;
-                        case "3":
-                            Glide.with(holder.reviewThreeImgView).load(pictureReference)
-                                    .into(holder.reviewThreeImgView);
-                            break;
-                        case "4":
-                            Glide.with(holder.reviewFourImgView).load(pictureReference)
-                                    .into(holder.reviewFourImgView);
-                    }
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                reviewCounter[0]++;
+                String pictureUID = snapshot.getKey();
+                StorageReference pictureReference = pictureStorageRef.child(pictureUID);
+                switch (reviewCounter[0].toString()) {
+                    case "1":
+                        Glide.with(holder.reviewOneImgView).load(pictureReference)
+                                .into(holder.reviewOneImgView);
+                        break;
+                    case "2":
+                        Glide.with(holder.reviewTwoImgView).load(pictureReference)
+                                .into(holder.reviewTwoImgView);
+                        break;
+                    case "3":
+                        Glide.with(holder.reviewThreeImgView).load(pictureReference)
+                                .into(holder.reviewThreeImgView);
+                        break;
+                    case "4":
+                        Glide.with(holder.reviewFourImgView).load(pictureReference)
+                                .into(holder.reviewFourImgView);
+                }
             }
 
             @Override
@@ -132,8 +117,8 @@ public class YourListsRecyclerViewAdapter
             categoryTextView = itemView.findViewById(R.id.categoryTextView);
             reviewOneImgView = itemView.findViewById(R.id.reviewOneImageView);
             reviewTwoImgView = itemView.findViewById(R.id.reviewTwoImageView);
-            reviewThreeImgView = itemView.findViewById(R.id.reviewThreeImageView);
-            reviewFourImgView = itemView.findViewById(R.id.reviewFourImageView);
+//            reviewThreeImgView = itemView.findViewById(R.id.reviewThreeImageView);
+//            reviewFourImgView = itemView.findViewById(R.id.reviewFourImageView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

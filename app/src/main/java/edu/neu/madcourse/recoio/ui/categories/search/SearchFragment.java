@@ -54,7 +54,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         reviews = new ArrayList<>();
-        final String searchText = getArguments().getString("searchText");
+        String searchText = getArguments().getString("searchText");
         final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
 
         // Based on searchText, only show results in reviewsRef that match the text
@@ -74,23 +74,18 @@ public class SearchFragment extends Fragment {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                if (snapshot.child("product").getValue().toString().toLowerCase().contains(searchText.toLowerCase()) ||
-                        snapshot.child("ownerName").getValue().toString().toLowerCase().contains(searchText.toLowerCase()) ||
-                        snapshot.child("category").getValue().toString().toLowerCase().contains(searchText.toLowerCase())){
-
-                    Review newReview = new Review(
-                            (String) snapshot.child("uid").getValue(),
-                            (String) snapshot.child("product").getValue(),
-                            (String) snapshot.child("rating").getValue(),
-                            (String) snapshot.child("review").getValue(),
-                            (String) snapshot.child("ownerName").getValue(),
-                            (Boolean) snapshot.child("hasPicture").getValue(),
-                            (Long) snapshot.child("likeCount").getValue()
-                    );
-                    reviews.add(newReview);
-                    adapter.notifyDataSetChanged();
-                }
+                Review newReview = new Review(
+                        (String) snapshot.child("uid").getValue(),
+                        (String) snapshot.child("product").getValue(),
+                        (String) snapshot.child("rating").getValue(),
+                        (String) snapshot.child("review").getValue(),
+                        (String) snapshot.child("ownerName").getValue(),
+                        (Boolean) snapshot.child("hasPicture").getValue(),
+                        (Long) snapshot.child("likeCount").getValue(),
+                        (String) snapshot.child("owner").getValue()
+                );
+                reviews.add(newReview);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -113,9 +108,6 @@ public class SearchFragment extends Fragment {
 
             }
         };
-
-
-
         reviewsRef.addChildEventListener(childEventListener);
         createAdapter();
         adapter.setItemClickListener(new SearchRecyclerViewAdapter.ItemClickListener() {

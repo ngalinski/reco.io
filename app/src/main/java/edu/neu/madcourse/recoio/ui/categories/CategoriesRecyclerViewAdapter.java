@@ -64,9 +64,9 @@ public class CategoriesRecyclerViewAdapter
         holder.categoryTextView.setText(categories[position]);
         final Integer[] reviewCounter = {0};
 
-        Query reviewsQuery = categoriesReference.child(categoryString).limitToFirst(4);
+        Query reviewsQuery = categoriesReference.child(categoryString).limitToFirst(2);
 
-        reviewsQuery.addChildEventListener(new ChildEventListener() {
+        ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     reviewCounter[0]++;
@@ -82,13 +82,13 @@ public class CategoriesRecyclerViewAdapter
                             Glide.with(holder.reviewTwoImgView).load(pictureReference)
                                     .into(holder.reviewTwoImgView);
                             break;
-                        case "3":
-                            Glide.with(holder.reviewThreeImgView).load(pictureReference)
-                                    .into(holder.reviewThreeImgView);
-                            break;
-                        case "4":
-                            Glide.with(holder.reviewFourImgView).load(pictureReference)
-                                    .into(holder.reviewFourImgView);
+//                        case "3":
+//                            Glide.with(holder.reviewThreeImgView).load(pictureReference)
+//                                    .into(holder.reviewThreeImgView);
+//                            break;
+//                        case "4":
+//                            Glide.with(holder.reviewFourImgView).load(pictureReference)
+//                                    .into(holder.reviewFourImgView);
                     }
 
             }
@@ -112,7 +112,8 @@ public class CategoriesRecyclerViewAdapter
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+        reviewsQuery.addChildEventListener(childEventListener);
     }
 
     @Override
@@ -133,8 +134,8 @@ public class CategoriesRecyclerViewAdapter
             categoryTextView = itemView.findViewById(R.id.categoryTextView);
             reviewOneImgView = itemView.findViewById(R.id.reviewOneImageView);
             reviewTwoImgView = itemView.findViewById(R.id.reviewTwoImageView);
-            reviewThreeImgView = itemView.findViewById(R.id.reviewThreeImageView);
-            reviewFourImgView = itemView.findViewById(R.id.reviewFourImageView);
+//            reviewThreeImgView = itemView.findViewById(R.id.reviewThreeImageView);
+//            reviewFourImgView = itemView.findViewById(R.id.reviewFourImageView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
