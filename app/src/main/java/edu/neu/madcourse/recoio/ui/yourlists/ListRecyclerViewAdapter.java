@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -27,12 +29,14 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         void onItemClick(int position, Context context);
     }
 
-    private final ArrayList<Review> reviews;
-    private ItemClickListener itemClickListener;
+    private final ArrayList<Review> lists;
+    private ListRecyclerViewAdapter.ItemClickListener itemClickListener;
     private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    private final DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference listsRef = firebaseDatabase.child("lists");
 
-    public ListRecyclerViewAdapter(ArrayList<Review> reviews) {
-        this.reviews = reviews;
+    public ListRecyclerViewAdapter(ArrayList<Review> lists) {
+        this.lists = lists;
     }
 
     public void setItemClickListener(ItemClickListener listener) {
@@ -42,15 +46,15 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View newReview = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.review_cell, parent, false
+        View list = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.category_cell, parent, false
         );
-        return new ViewHolder(newReview, itemClickListener);
+        return new ViewHolder(list, itemClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Review review = reviews.get(position);
+        Review review = lists.get(position);
         holder.productTextView.setText(review.getProductTitle());
         holder.productRatingBar.setRating((Float.parseFloat(review.getRating())));
         holder.reviewTextView.setText(review.getReviewText());
@@ -68,7 +72,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
 
     @Override
     public int getItemCount() {
-        return reviews.size();
+        return lists.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

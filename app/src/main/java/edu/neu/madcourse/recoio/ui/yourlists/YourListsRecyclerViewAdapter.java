@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +33,7 @@ public class YourListsRecyclerViewAdapter
     private final DatabaseReference listsReference = firebaseDatabase.child("lists");
     private final StorageReference pictureStorageRef = FirebaseStorage.getInstance().getReference()
             .child("reviewPictures");
+    private final FirebaseUser curUser = FirebaseAuth.getInstance().getCurrentUser();
 
     public interface ItemClickListener {
         void onItemClick(int position, Context context);

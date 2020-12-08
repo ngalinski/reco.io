@@ -110,6 +110,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
         });
     }
 
+    // TODO: add permission back
     private void pictureButtonPressed() {
 //        setupCameraPermission();
         takePicture();
