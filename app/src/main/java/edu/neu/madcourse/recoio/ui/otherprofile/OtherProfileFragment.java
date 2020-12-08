@@ -42,7 +42,7 @@ public class OtherProfileFragment extends Fragment {
 
     private TextView userNameTextView;
     private Button followButton;
-    private Long otherUserFollowerCount = 0L;
+    private Long otherUserFollowerCount;
 
     private TextView otherUserFollowingCountTextView;
     private TextView otherUserFollowerCountTextView;
@@ -197,6 +197,7 @@ public class OtherProfileFragment extends Fragment {
                 } else {
                     otherUserRef.child("followers").child(currentUserUID).setValue(false);
                     otherUserFollowerCount = otherUserFollowerCount - 1;
+                    otherUserRef.child("followerCount").setValue(otherUserFollowerCount);
                     currentUserRef.child("following").child(otherUserUID).setValue(false);
                     otherUserFollowerCountTextView.setText(String.valueOf(otherUserFollowerCount));
                     followButton.setText("Follow");
