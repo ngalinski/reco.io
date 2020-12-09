@@ -1,7 +1,6 @@
 package edu.neu.madcourse.recoio.ui.yourlists;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,13 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,11 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,8 +33,6 @@ import java.util.HashMap;
 
 import edu.neu.madcourse.recoio.R;
 import edu.neu.madcourse.recoio.Review;
-import edu.neu.madcourse.recoio.ui.addreview.AddReviewFragment;
-import edu.neu.madcourse.recoio.ui.newsfeed.ReviewRecyclerViewAdapter;
 
 
 public class AddListFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -52,7 +42,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
     private AddListRecyclerViewAdapter adapter;
 
     private ArrayList<Review> reviews;
-    private ArrayList<String> reviewUIDS = new ArrayList<>();
+    private ArrayList<String> listReviewUIDS = new ArrayList<>();
     private HashMap<Integer, Boolean> isClickedHashMap = new HashMap<>();
 
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -60,6 +50,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
     private EditText listEditText;
+    private Button createListButton;
 
     public static AddListFragment newInstance() {
         return new AddListFragment();
@@ -77,6 +68,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
         reviews = new ArrayList<>();
         final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
         listEditText = requireView().findViewById(R.id.listNameEditText);
+        createListButton = requireView().findViewById(R.id.createListButton);
 
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -91,6 +83,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
                         (Long) snapshot.child("likeCount").getValue(),
                         (String) snapshot.child("owner").getValue()
                 );
+                newReview.setClicked(false);
                 reviews.add(newReview);
                 adapter.notifyDataSetChanged();
             }
@@ -121,9 +114,21 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
         adapter.setItemClickListener(new AddListRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onItemClick(int position, Context context) {
-                if (isClickedHashMap.containsKey(position) && isClickedHashMap.get(position));
-                reviewUIDS.add(reviews.get(position).getUid());
-                isClickedHashMap.put(position, true);
+                Review clickedReview = reviews.get(position);
+                clickedReview.setClicked(!clickedReview.getClicked());
+                if (clickedReview.getClicked()) {
+                    listReviewUIDS.add(clickedReview.getUid());
+                } else {
+                    listReviewUIDS.remove(clickedReview.getUid());
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        createListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newListClick();
             }
         });
     }
@@ -143,9 +148,13 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
                         DatabaseReference userLists = user.child("lists");
                         userLists.child(String.valueOf(date.getTime())).setValue(true);
 
-                        NavHostFragment.findNavController(AddListFragment.this)
-                                .navigate(R.id.listFragment);
+                        newListRef.child("name").setValue(listEditText.getText().toString());
 
+                        for (String reviewUID: listReviewUIDS) {
+                            newListRef.child("reviews").child(reviewUID).setValue(true);
+                        }
+                        NavHostFragment.findNavController(AddListFragment.this)
+                                .navigate(R.id.navigation_your_lists);
                     }
 
                     @Override

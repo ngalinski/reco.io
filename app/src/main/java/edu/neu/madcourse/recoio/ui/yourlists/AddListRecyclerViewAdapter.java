@@ -1,14 +1,17 @@
 package edu.neu.madcourse.recoio.ui.yourlists;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -62,7 +65,11 @@ public class AddListRecyclerViewAdapter extends RecyclerView.Adapter<AddListRecy
             Glide.with(holder.itemView)
                     .load(reviewImage).into(holder.productImageView);
         }
-
+        if (review.getClicked()) {
+            holder.reviewCardViewLayout.setBackgroundColor(Color.parseColor("#A9EBD9"));
+        } else {
+            holder.reviewCardViewLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        }
 
     }
 
@@ -77,6 +84,8 @@ public class AddListRecyclerViewAdapter extends RecyclerView.Adapter<AddListRecy
         ImageView productImageView;
         TextView reviewTextView;
         TextView reviewerTextView;
+        RelativeLayout reviewRelativeLayout;
+        CardView reviewCardViewLayout;
 
         public ViewHolder(@NonNull final View itemView, final ItemClickListener listener) {
             super(itemView);
@@ -85,6 +94,8 @@ public class AddListRecyclerViewAdapter extends RecyclerView.Adapter<AddListRecy
             productImageView = itemView.findViewById(R.id.productImageView);
             reviewTextView = itemView.findViewById(R.id.productReviewTextView);
             reviewerTextView = itemView.findViewById(R.id.reviewerTextView);
+            reviewRelativeLayout = itemView.findViewById(R.id.reviewRelativeLayout);
+            reviewCardViewLayout = itemView.findViewById(R.id.reviewCardView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

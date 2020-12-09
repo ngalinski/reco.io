@@ -102,11 +102,14 @@
         <fragment
             android:id="@+id/listFragment"
             android:name="edu.neu.madcourse.recoio.ui.yourlists.ListFragment"
-            android:label="fragment_list"
-            tools:layout="@layout/fragment_list" >
+            android:label="Your Review List"
+            tools:layout="@layout/fragment_list">
             <action
                 android:id="@+id/action_listFragment_to_navigation_your_lists"
                 app:destination="@id/navigation_your_lists" />
+            <action
+                android:id="@+id/action_listFragment_to_reviewFragment"
+                app:destination="@id/reviewFragment" />
         </fragment>
         <fragment
             android:id="@+id/searchFragment"

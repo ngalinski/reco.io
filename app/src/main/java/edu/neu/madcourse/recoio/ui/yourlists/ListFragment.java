@@ -1,60 +1,58 @@
 package edu.neu.madcourse.recoio.ui.yourlists;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import edu.neu.madcourse.recoio.R;
+import edu.neu.madcourse.recoio.Review;
+import edu.neu.madcourse.recoio.ui.categories.CategoryFragment;
+import edu.neu.madcourse.recoio.ui.categories.CategoryRecyclerViewAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ListFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ListFragment newInstance(String param1, String param2) {
-        ListFragment fragment = new ListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private String listName;
+    private String listUID;
+    private RecyclerView listRecyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private ListRecyclerViewAdapter adapter;
+
+    private TextView listTitleTextView;
+
+    final private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+    private ArrayList<Review> reviews;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -62,5 +60,89 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            listName = getArguments().getString("listName");
+            listUID = getArguments().getString("listUID");
+        }
+
+        listTitleTextView = requireView().findViewById(R.id.listTitleTextView);
+
+        listTitleTextView.setText(listName);
+
+        reviews = new ArrayList<>();
+        final DatabaseReference reviewsRef = databaseReference.child("reviews");
+        final DatabaseReference listReference = databaseReference.child("lists").child(listUID).child("reviews");
+
+        listReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                reviewsRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Review newReview = new Review(
+                                (String) snapshot.child("uid").getValue(),
+                                (String) snapshot.child("product").getValue(),
+                                (String) snapshot.child("rating").getValue(),
+                                (String) snapshot.child("review").getValue(),
+                                (String) snapshot.child("ownerName").getValue(),
+                                (Boolean) snapshot.child("hasPicture").getValue(),
+                                (Long) snapshot.child("likeCount").getValue(),
+                                (String) snapshot.child("owner").getValue()
+                        );
+                        reviews.add(newReview);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        createAdapter();
+        adapter.setItemClickListener(new ListRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(int position, Context context) {
+                Bundle reviewUID = new Bundle();
+                reviewUID.putString("uid", reviews.get(position).getUid());
+                NavHostFragment.findNavController(ListFragment.this)
+                        .navigate(R.id.action_listFragment_to_reviewFragment, reviewUID);
+            }
+        });
+    }
+
+    public void createAdapter() {
+        listRecyclerView = requireView().findViewById(R.id.listRecyclerView);
+        layoutManager = new LinearLayoutManager(requireActivity());
+        listRecyclerView.setLayoutManager(layoutManager);
+        adapter = new ListRecyclerViewAdapter(reviews);
+        listRecyclerView.setAdapter(adapter);
     }
 }

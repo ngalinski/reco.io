@@ -9,6 +9,7 @@ public class Review {
     private String reviewerUID;
     private Long likeCount;
     private Boolean hasPicture;
+    private Boolean isClicked;
 
     public Review(String uid, String productTitle, String rating, String reviewText, String reviewer,
                   Boolean hasPicture, Long likeCount, String reviewerUID) {
@@ -89,5 +90,13 @@ public class Review {
 
     public Boolean getHasPicture() {
         return hasPicture;
+    }
+
+    public Boolean getClicked() {
+        return isClicked;
+    }
+
+    public void setClicked(Boolean clicked) {
+        isClicked = clicked;
     }
 }

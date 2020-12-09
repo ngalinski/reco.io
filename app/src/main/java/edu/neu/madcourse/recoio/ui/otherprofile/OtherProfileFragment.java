@@ -190,6 +190,7 @@ public class OtherProfileFragment extends Fragment {
                     otherUserRef.child("followers").child(currentUserUID).setValue(true);
                     otherUserFollowerCount = otherUserFollowerCount + 1;
                     otherUserRef.child("followerCount").setValue(otherUserFollowerCount);
+//                    currentUserRef.child("followingCount").setValue(otherUserFollowerCount);
                     currentUserRef.child("following").child(otherUserUID).setValue(true);
                     otherUserFollowerCountTextView.setText(String.valueOf(otherUserFollowerCount));
                     followButton.setText("Un-follow");

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -58,8 +59,8 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
     private EditText reviewEditText;
     private Button postReviewButton;
     private Spinner categoriesSpinner;
-    private Button pictureButton;
     private ImageView newProductImageView;
+    private ProgressBar progressBar;
 
     private Bitmap newProductBitMap;
 
@@ -88,6 +89,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
         postReviewButton = requireView().findViewById(R.id.postReviewButton);
         categoriesSpinner = requireView().findViewById(R.id.categorySpinner);
         newProductImageView = requireView().findViewById(R.id.newProductImageView);
+        progressBar = requireView().findViewById(R.id.addReviewProgressBar);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.requireContext(),
                 R.array.categories_array, android.R.layout.simple_spinner_item);
@@ -141,6 +143,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
 
     public void postReviewPressed() {
         if (!productSearchEditText.getText().toString().equals("")) {
+            progressBar.setVisibility(View.VISIBLE);
             final Date date = Calendar.getInstance().getTime();
             boolean hasPicture = false;
             // this code is based off of the google firebase docs code
@@ -161,6 +164,9 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        NavHostFragment.findNavController(AddReviewFragment.this)
+                                .navigate(R.id.navigation_newsfeed);
                     }
                 });
             }
@@ -192,8 +198,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                         DatabaseReference userReviews = user.child("reviews");
                         userReviews.child(String.valueOf(date.getTime())).setValue(true);
 
-                        NavHostFragment.findNavController(AddReviewFragment.this)
-                                .navigate(R.id.navigation_newsfeed);
+
 
                     }
 

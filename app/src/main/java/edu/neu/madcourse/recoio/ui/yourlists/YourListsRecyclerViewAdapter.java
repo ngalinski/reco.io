@@ -22,6 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+
+import edu.neu.madcourse.recoio.List;
 import edu.neu.madcourse.recoio.R;
 
 public class YourListsRecyclerViewAdapter
@@ -44,10 +47,10 @@ public class YourListsRecyclerViewAdapter
     }
 
 
-    private final String[] categories;
+    private final ArrayList<List> lists;
 
-    public YourListsRecyclerViewAdapter(String[] categories) {
-        this.categories = categories;
+    public YourListsRecyclerViewAdapter(ArrayList<List> lists) {
+        this.lists = lists;
     }
 
     @NonNull
@@ -61,17 +64,19 @@ public class YourListsRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        String categoryString = categories[position];
-        holder.categoryTextView.setText(categories[position]);
+        holder.categoryTextView.setText(lists.get(position).getListName());
         final Integer[] reviewCounter = {0};
 
-        Query reviewsQuery = listsReference.child(categoryString).limitToFirst(4);
+        DatabaseReference listReviewsReference = listsReference.child(lists.get(position).getListUID()).child("reviews");
 
-        reviewsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query reviewsQuery = listReviewsReference.limitToFirst(2);
+
+        ChildEventListener childEventListener = new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 reviewCounter[0]++;
                 String pictureUID = snapshot.getKey();
+                assert pictureUID != null;
                 StorageReference pictureReference = pictureStorageRef.child(pictureUID);
                 switch (reviewCounter[0].toString()) {
                     case "1":
@@ -82,26 +87,44 @@ public class YourListsRecyclerViewAdapter
                         Glide.with(holder.reviewTwoImgView).load(pictureReference)
                                 .into(holder.reviewTwoImgView);
                         break;
-                    case "3":
-                        Glide.with(holder.reviewThreeImgView).load(pictureReference)
-                                .into(holder.reviewThreeImgView);
-                        break;
-                    case "4":
-                        Glide.with(holder.reviewFourImgView).load(pictureReference)
-                                .into(holder.reviewFourImgView);
+//                        case "3":
+//                            Glide.with(holder.reviewThreeImgView).load(pictureReference)
+//                                    .into(holder.reviewThreeImgView);
+//                            break;
+//                        case "4":
+//                            Glide.with(holder.reviewFourImgView).load(pictureReference)
+//                                    .into(holder.reviewFourImgView);
                 }
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+
+        reviewsQuery.addChildEventListener(childEventListener);
     }
 
     @Override
     public int getItemCount() {
-        return categories.length;
+        return lists.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
