@@ -143,31 +143,11 @@ public class ProfileFragment extends Fragment {
         settingsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final PopupMenu prof_dropdown = new PopupMenu(requireContext(), settingsImageView);
-                prof_dropdown.getMenuInflater().inflate(R.menu.profile_dropdown_menu, prof_dropdown.getMenu());
-
-                prof_dropdown.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.menu_edit:
-                                // TODO: add profile edit page
-                                return true;
-                            case R.id.menu_privacy:
-                                // TODO: fix this navigation
-                               // NavHostFragment.findNavController(ProfileFragment.this)
-                                 //       .navigate(R.id.action_navigation_profile_to_privacy);
-                                return true;
-                            case R.id.menu_logout:
-                                if (mAuth.getCurrentUser() != null) {
-                                    mAuth.signOut();
-                                    NavHostFragment.findNavController(ProfileFragment.this)
-                                            .navigate(R.id.action_global_loginFragment);
-                                }
-                            default:
-                                prof_dropdown.show();
-                        }
-                    return true;}
-                });
+                if (mAuth.getCurrentUser() != null) {
+                    mAuth.signOut();
+                    NavHostFragment.findNavController(ProfileFragment.this)
+                            .navigate(R.id.action_global_loginFragment);
+                }
             }
         });
 
