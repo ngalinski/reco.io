@@ -30,9 +30,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import edu.neu.madcourse.recoio.R;
 import edu.neu.madcourse.recoio.Review;
+import edu.neu.madcourse.recoio.ui.categories.search.SearchFragment;
+import edu.neu.madcourse.recoio.ui.categories.search.SearchRecyclerViewAdapter;
 
 
 public class AddListFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -50,7 +53,13 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
     private EditText listEditText;
+    private EditText filterText;
     private Button createListButton;
+    private Button filterProductsButton;
+    private Button clearFilterButton;
+
+    ChildEventListener childEventListenerFiltered;
+    final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
 
     public static AddListFragment newInstance() {
         return new AddListFragment();
@@ -66,9 +75,12 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         reviews = new ArrayList<>();
-        final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
+
         listEditText = requireView().findViewById(R.id.listNameEditText);
+        filterText = requireView().findViewById(R.id.searchList);
         createListButton = requireView().findViewById(R.id.createListButton);
+        filterProductsButton = requireView().findViewById(R.id.searchListButton);
+        clearFilterButton = requireView().findViewById(R.id.clearButton);
 
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -131,7 +143,47 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
                 newListClick();
             }
         });
+
+        adapter.setItemClickListener(new AddListRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(int position, Context context) {
+                Review clickedReview = reviews.get(position);
+                clickedReview.setClicked(!clickedReview.getClicked());
+                if (clickedReview.getClicked()) {
+                    listReviewUIDS.add(clickedReview.getUid());
+                } else {
+                    listReviewUIDS.remove(clickedReview.getUid());
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        filterProductsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!filterText.getText().toString().equals("")){
+                    for (int i = 0; i < reviews.size(); i++){
+                        if (reviews.get(i).getProductTitle().toLowerCase().contains(filterText.getText().toString().toLowerCase()) ){
+                            reviews.get(i).setFilteredOut(false);
+                        } else {
+                            reviews.get(i).setFilteredOut(true);
+                        }
+                    }
+                };
+            }
+        });
+
+        clearFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < reviews.size(); i++){
+                    reviews.get(i).setFilteredOut(false);
+                    System.out.println(reviews.get(i).getProductTitle() + "\n\n");
+                }
+            }
+        });
     }
+
 
     public void newListClick() {
         if (!listEditText.getText().toString().equals("")) {

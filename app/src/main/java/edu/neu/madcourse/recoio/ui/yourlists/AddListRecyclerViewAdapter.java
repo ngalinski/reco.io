@@ -70,6 +70,11 @@ public class AddListRecyclerViewAdapter extends RecyclerView.Adapter<AddListRecy
         } else {
             holder.reviewCardViewLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
+        if (review.getFilteredOut()){
+            holder.reviewCardViewLayout.setVisibility(View.GONE);
+        } else {
+            holder.reviewCardViewLayout.setVisibility(View.VISIBLE);
+        }
 
     }
 

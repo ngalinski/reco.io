@@ -10,6 +10,7 @@ public class Review {
     private Long likeCount;
     private Boolean hasPicture;
     private Boolean isClicked;
+    private Boolean isFilteredOut;
 
     public Review(String uid, String productTitle, String rating, String reviewText, String reviewer,
                   Boolean hasPicture, Long likeCount, String reviewerUID) {
@@ -21,8 +22,12 @@ public class Review {
         this.hasPicture = hasPicture;
         this.likeCount = likeCount;
         this.reviewerUID = reviewerUID;
+        this.isFilteredOut = false;
     }
 
+    public void setFilteredOut (Boolean filtered) { isFilteredOut = filtered; }
+
+    public Boolean getFilteredOut() { return isFilteredOut; }
 
     public Boolean hasPicture() {
         return hasPicture;
