@@ -22,6 +22,7 @@ public class Review {
         this.reviewerUID = reviewerUID;
     }
 
+
     public Boolean hasPicture() {
         return hasPicture;
     }

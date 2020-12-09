@@ -74,6 +74,9 @@
             <action
                 android:id="@+id/action_reviewFragment_to_otherProfileFragment"
                 app:destination="@id/otherProfileFragment" />
+            <action
+                android:id="@+id/action_reviewFragment_to_searchFragment"
+                app:destination="@id/searchFragment" />
         </fragment>
         <fragment
             android:id="@+id/categoryFragment"
@@ -113,6 +116,9 @@
             <action
                 android:id="@+id/action_searchFragment_to_navigation_categories"
                 app:destination="@id/navigation_categories" />
+            <action
+                android:id="@+id/action_searchFragment_to_reviewFragment"
+                app:destination="@id/reviewFragment" />
         </fragment>
         <fragment
             android:id="@+id/otherProfileFragment"
