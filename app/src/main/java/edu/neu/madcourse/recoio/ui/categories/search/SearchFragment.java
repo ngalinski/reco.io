@@ -44,6 +44,10 @@ public class SearchFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private SearchRecyclerViewAdapter adapter;
 
+    final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
+    ChildEventListener childEventListener;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
@@ -55,7 +59,6 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         reviews = new ArrayList<>();
         final String searchText = getArguments().getString("searchText");
-        final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
 
         // Based on searchText, only show results in reviewsRef that match the text
 
@@ -71,7 +74,7 @@ public class SearchFragment extends Fragment {
 //            }
 //        });
 
-        ChildEventListener childEventListener = new ChildEventListener() {
+         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
@@ -115,9 +118,8 @@ public class SearchFragment extends Fragment {
             }
         };
 
-
-
         reviewsRef.addChildEventListener(childEventListener);
+
         createAdapter();
         adapter.setItemClickListener(new SearchRecyclerViewAdapter.ItemClickListener() {
             @Override
@@ -130,7 +132,13 @@ public class SearchFragment extends Fragment {
         });
     }
 
-//        reviewsRef.addChildEventListener(new ChildEventListener() {
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        reviewsRef.removeEventListener(childEventListener);
+    }
+
+    //        reviewsRef.addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 //                reviewsRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
