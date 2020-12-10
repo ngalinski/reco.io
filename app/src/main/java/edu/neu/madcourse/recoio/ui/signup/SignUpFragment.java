@@ -121,6 +121,7 @@ public class SignUpFragment extends Fragment {
         newUser.child("email").setValue(currentUser.getEmail());
         newUser.child("followerCount").setValue(0);
         newUser.child("followingCount").setValue(0);
+        newUser.child("hasProfilePic").setValue(false);
         InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(passwordVerify.getWindowToken(), 0);
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);

@@ -1,6 +1,9 @@
 package edu.neu.madcourse.recoio.ui.profile;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,14 +13,20 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,17 +34,33 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import edu.neu.madcourse.recoio.R;
 import edu.neu.madcourse.recoio.Review;
+import edu.neu.madcourse.recoio.ui.addreview.AddReviewFragment;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
-    private ProfileViewModel mViewModel;
+    static final int REQUEST_IMAGE_CAPTURE = 103;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference profilePictures = storage.getReference().child("profilePictures");
+
+    final private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    final DatabaseReference usersRef = databaseReference.child("users");
+    final DatabaseReference currUser = usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+    final DatabaseReference currUserReviews = currUser.child("reviews");
+    final DatabaseReference reviewsRef = databaseReference.child("reviews");
 
     private ImageButton settingsImageView;
+    private ImageView profilePictureImageView;
     private TextView userNameTextView;
     private TextView currentUserFollowingCountTV;
     private TextView currentUserFollowersCountTV;
@@ -45,9 +70,9 @@ public class ProfileFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private ProfileReviewRecyclerViewAdapter adapter;
 
-    private ArrayList<Review> reviews;
+    private Bitmap newProfilePicBitmap;
 
-    final private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    private ArrayList<Review> reviews;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -68,14 +93,12 @@ public class ProfileFragment extends Fragment {
         userNameTextView = requireView().findViewById(R.id.currentUserName);
         currentUserFollowingCountTV = requireView().findViewById(R.id.currentUserFollowingCountTextView);
         currentUserFollowersCountTV = requireView().findViewById(R.id.currentUserFollowersCountTextView);
+        profilePictureImageView = requireView().findViewById(R.id.currentUserProfilePicImageView);
 
         reviews = new ArrayList<>();
 
 
-        final DatabaseReference usersRef = databaseReference.child("users");
-        final DatabaseReference currUser = usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        final DatabaseReference currUserReviews = currUser.child("reviews");
-        final DatabaseReference reviewsRef = databaseReference.child("reviews");
+
 
         currUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -83,6 +106,12 @@ public class ProfileFragment extends Fragment {
                 userNameTextView.setText((String) snapshot.child("name").getValue());
                 currentUserFollowersCountTV.setText(String.valueOf(snapshot.child("followerCount").getValue()));
                 currentUserFollowingCountTV.setText(String.valueOf(snapshot.child("followingCount").getValue()));
+                if ( snapshot.child("hasProfilePic").getValue() != null
+                        || (boolean) snapshot.child("hasProfilePic").getValue()) {
+                    StorageReference userProfilePic = profilePictures
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    Glide.with(requireView()).load(userProfilePic).into(profilePictureImageView);
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -151,8 +180,12 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
-
+        profilePictureImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePicture();
+            }
+        });
 
         adapter.setItemClickListener(new ProfileReviewRecyclerViewAdapter.ItemClickListener() {
             @Override
@@ -171,5 +204,48 @@ public class ProfileFragment extends Fragment {
         profileReviewRecyclerView.setLayoutManager(layoutManager);
         adapter = new ProfileReviewRecyclerViewAdapter(reviews);
         profileReviewRecyclerView.setAdapter(adapter);
+    }
+
+    public void takePicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(requireContext(), "Unable to take a picture!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            assert data != null;
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            profilePictureImageView.setImageBitmap(imageBitmap);
+            newProfilePicBitmap = imageBitmap;
+            if (newProfilePicBitmap != null) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                newProfilePicBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] pictureData = baos.toByteArray();
+
+                final StorageReference newReviewImage = profilePictures.child(
+                        FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                UploadTask uploadTask = newReviewImage.putBytes(pictureData);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(requireActivity(), "Can't upload photo", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        //progressBar.setVisibility(View.INVISIBLE);
+                        currUser.child("hasProfilePic").setValue(true);
+                    }
+                });
+            }
+        }
     }
 }

@@ -14,8 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -39,6 +43,8 @@ public class OtherProfileFragment extends Fragment {
     private OtherProfileReviewRecyclerViewAdapter adapter;
 
     private DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("users");
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference profilePictures = storage.getReference().child("profilePictures");
 
     private TextView userNameTextView;
     private Button followButton;
@@ -47,6 +53,7 @@ public class OtherProfileFragment extends Fragment {
 
     private TextView otherUserFollowingCountTextView;
     private TextView otherUserFollowerCountTextView;
+    private ImageView otherUserProfilePictureImageView;
 
     String otherUserUID;
     String currentUserUID;
@@ -79,6 +86,7 @@ public class OtherProfileFragment extends Fragment {
         userNameTextView = requireView().findViewById(R.id.otherUserName);
         otherUserFollowingCountTextView = requireView().findViewById(R.id.otherUserFollowingCountTextView);
         otherUserFollowerCountTextView = requireView().findViewById(R.id.otherUserFollowersCountTextView);
+        otherUserProfilePictureImageView = requireView().findViewById(R.id.otherUserPFImageView);
 
 
 
@@ -116,6 +124,12 @@ public class OtherProfileFragment extends Fragment {
                 otherUserFollowerCountTextView.setText(String.valueOf(snapshot.child("followerCount").getValue()));
                 otherUserFollowingCountTextView.setText(String.valueOf(snapshot.child("followingCount").getValue()));
                 otherUserFollowerCount = (Long) snapshot.child("followerCount").getValue();
+                if ( snapshot.child("hasProfilePic").getValue() != null
+                        || (boolean) snapshot.child("hasProfilePic").getValue()) {
+                    StorageReference userProfilePic = profilePictures
+                            .child(otherUserUID);
+                    Glide.with(requireView()).load(userProfilePic).into(otherUserProfilePictureImageView);
+                }
                 // this code will set up the following feature
                 if (snapshot.child("followers").child(currentUserUID).getValue() == null
                         || !((boolean) snapshot.child("followers").child(currentUserUID).getValue())) {
