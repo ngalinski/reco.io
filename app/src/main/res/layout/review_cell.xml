@@ -36,13 +36,14 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/productTitleTextView"
             app:cardCornerRadius="50dp">
+
             <ImageView
                 android:id="@+id/productImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="image of review"
                 android:scaleType="fitXY"
-                tools:srcCompat="@tools:sample/avatars"
-                android:contentDescription="image of review" />
+                app:srcCompat="@drawable/reco_logo" />
         </androidx.cardview.widget.CardView>
 
 

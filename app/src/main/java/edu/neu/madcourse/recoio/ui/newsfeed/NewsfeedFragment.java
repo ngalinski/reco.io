@@ -60,7 +60,7 @@ public class NewsfeedFragment extends Fragment {
         final DatabaseReference reviewsRef = databaseReference.child("reviews");
         final DatabaseReference usersRef = databaseReference.child("users");
 
-
+        // this code generates a token for the logged in user.
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {

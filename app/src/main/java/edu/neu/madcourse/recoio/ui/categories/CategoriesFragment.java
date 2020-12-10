@@ -76,7 +76,7 @@ public class CategoriesFragment extends Fragment {
 
     public void createAdapter() {
         categoriesRecyclerView = requireView().findViewById(R.id.categoriesRecyclerView);
-        layoutManager = new GridLayoutManager(getActivity(), 2);
+        layoutManager = new GridLayoutManager(getActivity(), 1);
         categoriesRecyclerView.setLayoutManager(layoutManager);
         adapter = new CategoriesRecyclerViewAdapter(categories);
         categoriesRecyclerView.setAdapter(adapter);

@@ -29,26 +29,44 @@
             android:layout_below="@id/categoryTextView"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true">
+            <Space
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="50dp">
+                <ImageView
+                    android:id="@+id/reviewOneImageView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/reco_logo"
+                    android:scaleType="fitXY"
+                    android:contentDescription="@string/category_review_picture" />
+            </androidx.cardview.widget.CardView>
+            <Space
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
 
-        <ImageView
-            android:id="@+id/reviewOneImageView"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            tools:srcCompat="@tools:sample/avatars"
-            android:layout_margin="8dp"
-            android:layout_weight="1"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="50dp">
+            <ImageView
+                    android:id="@+id/reviewTwoImageView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/reco_logo"
+                    android:contentDescription="@string/category_review_picture" />
+            </androidx.cardview.widget.CardView>
+            <Space
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
 
-        <ImageView
-            android:id="@+id/reviewTwoImageView"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            tools:srcCompat="@tools:sample/avatars"
-            android:layout_weight="1"/>
 
         </LinearLayout>
 

@@ -186,7 +186,6 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
 
                             InputStream inputStream = conn.getInputStream();
                             System.out.println(inputStream.toString());
-                            System.out.println("HELLOOOOO WOOOORLDDD");
                         } catch (Exception error) {
                             error.printStackTrace();
                         }

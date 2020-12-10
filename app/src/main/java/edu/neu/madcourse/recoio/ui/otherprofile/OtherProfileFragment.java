@@ -43,6 +43,7 @@ public class OtherProfileFragment extends Fragment {
     private TextView userNameTextView;
     private Button followButton;
     private Long otherUserFollowerCount;
+    private Long currentUserFollowingCount;
 
     private TextView otherUserFollowingCountTextView;
     private TextView otherUserFollowerCountTextView;
@@ -95,6 +96,18 @@ public class OtherProfileFragment extends Fragment {
         final DatabaseReference otherUserReviews = otherUserRef.child("reviews");
         final DatabaseReference currentUserRef = usersRef.child(currentUserUID);
         final DatabaseReference reviewsRef = databaseReference.child("reviews");
+
+        currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentUserFollowingCount = (Long) snapshot.child("followingCount").getValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         otherUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -190,7 +203,8 @@ public class OtherProfileFragment extends Fragment {
                     otherUserRef.child("followers").child(currentUserUID).setValue(true);
                     otherUserFollowerCount = otherUserFollowerCount + 1;
                     otherUserRef.child("followerCount").setValue(otherUserFollowerCount);
-//                    currentUserRef.child("followingCount").setValue(otherUserFollowerCount);
+                    currentUserFollowingCount += 1;
+                    currentUserRef.child("followingCount").setValue(currentUserFollowingCount);
                     currentUserRef.child("following").child(otherUserUID).setValue(true);
                     otherUserFollowerCountTextView.setText(String.valueOf(otherUserFollowerCount));
                     followButton.setText("Un-follow");
@@ -199,6 +213,8 @@ public class OtherProfileFragment extends Fragment {
                     otherUserRef.child("followers").child(currentUserUID).setValue(false);
                     otherUserFollowerCount = otherUserFollowerCount - 1;
                     otherUserRef.child("followerCount").setValue(otherUserFollowerCount);
+                    currentUserFollowingCount -= 1;
+                    currentUserRef.child("followingCount").setValue(currentUserFollowingCount);
                     currentUserRef.child("following").child(otherUserUID).setValue(false);
                     otherUserFollowerCountTextView.setText(String.valueOf(otherUserFollowerCount));
                     followButton.setText("Follow");
