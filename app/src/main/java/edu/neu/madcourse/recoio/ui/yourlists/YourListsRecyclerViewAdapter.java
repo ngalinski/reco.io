@@ -35,6 +35,8 @@ public class YourListsRecyclerViewAdapter
     private final StorageReference pictureStorageRef = FirebaseStorage.getInstance().getReference()
             .child("reviewPictures");
 
+    private ChildEventListener childEventListener;
+
     public interface ItemClickListener {
         void onItemClick(int position, Context context);
     }
@@ -61,6 +63,7 @@ public class YourListsRecyclerViewAdapter
         );
         return new ViewHolder(category, itemClickListener);
     }
+    
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
@@ -71,7 +74,9 @@ public class YourListsRecyclerViewAdapter
 
         Query reviewsQuery = listReviewsReference.limitToFirst(2);
 
-        ChildEventListener childEventListener = new ChildEventListener() {
+
+
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 reviewCounter[0]++;
