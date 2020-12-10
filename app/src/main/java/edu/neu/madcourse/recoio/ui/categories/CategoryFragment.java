@@ -15,12 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -41,6 +45,7 @@ public class CategoryFragment extends Fragment {
     private TextView categoryTitleTextView;
 
     final private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    private String currentUserName;
 
     private ArrayList<Review> reviews;
 
@@ -72,10 +77,25 @@ public class CategoryFragment extends Fragment {
         final DatabaseReference reviewsRef = databaseReference.child("reviews");
         final DatabaseReference categoryReference = databaseReference.child("categories").child(categoryString);
 
+        // this code generates a token for the logged in user.
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                String token = task.getResult();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference users = database.getReference("users");
+                users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("token").setValue(token);
+            }
+        });
+
         categoryReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                reviewsRef.child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
+                currentUserName = (String) snapshot.child("name").getValue();
+                reviewsRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Review newReview = new Review(
@@ -137,7 +157,7 @@ public class CategoryFragment extends Fragment {
         categoryRecyclerView = requireView().findViewById(R.id.categoryRecyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         categoryRecyclerView.setLayoutManager(layoutManager);
-        adapter = new CategoryRecyclerViewAdapter(reviews);
+        adapter = new CategoryRecyclerViewAdapter(reviews, currentUserName);
         categoryRecyclerView.setAdapter(adapter);
     }
 

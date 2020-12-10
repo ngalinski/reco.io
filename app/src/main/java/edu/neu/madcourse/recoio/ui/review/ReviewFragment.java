@@ -124,7 +124,7 @@ public class ReviewFragment extends Fragment {
 
             }
         };
-        reviews.child(reviewUID).addValueEventListener(reviewEventListener);
+        reviews.child(reviewUID).addListenerForSingleValueEvent(reviewEventListener);
 
         createAdapter();
         reviews.child(reviewUID).child("comments").addChildEventListener(
@@ -187,7 +187,7 @@ public class ReviewFragment extends Fragment {
         final Date commentUID = Calendar.getInstance().getTime();
         final FirebaseUser commenter = FirebaseAuth.getInstance().getCurrentUser();
         if (!commentEditText.getText().toString().equals("")) {
-            mDatabase.child("users").child(commenter.getUid()).addValueEventListener(new ValueEventListener() {
+            mDatabase.child("users").child(commenter.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Comment newComment = new Comment(

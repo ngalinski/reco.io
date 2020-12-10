@@ -14,12 +14,16 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
@@ -46,6 +50,7 @@ public class SearchFragment extends Fragment {
 
     final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
     ChildEventListener childEventListener;
+    private String currentUserName;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -60,24 +65,23 @@ public class SearchFragment extends Fragment {
         reviews = new ArrayList<>();
         final String searchText = getArguments().getString("searchText");
 
-        // Based on searchText, only show results in reviewsRef that match the text
-
-//        currUser.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                userNameTextView.setText((String) snapshot.child("name").getValue());
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                String token = task.getResult();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference users = database.getReference("users");
+                users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("token").setValue(token);
+            }
+        });
 
          childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                currentUserName = (String) snapshot.child("name").getValue();
                 if (snapshot.child("product").getValue().toString().toLowerCase().contains(searchText.toLowerCase()) ||
                         snapshot.child("ownerName").getValue().toString().toLowerCase().contains(searchText.toLowerCase()) ||
                         snapshot.child("category").getValue().toString().toLowerCase().contains(searchText.toLowerCase())){
@@ -138,71 +142,13 @@ public class SearchFragment extends Fragment {
         reviewsRef.removeEventListener(childEventListener);
     }
 
-    //        reviewsRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                reviewsRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        Review newReview = new Review(
-//                                (String) snapshot.child("uid").getValue(),
-//                                (String) snapshot.child("product").getValue(),
-//                                (String) snapshot.child("rating").getValue(),
-//                                (String) snapshot.child("review").getValue(),
-//                                (String) snapshot.child("ownerName").getValue(),
-//                                (Boolean) snapshot.child("hasPicture").getValue(),
-//                                (Long) snapshot.child("likeCount").getValue()
-//                        );
-//                        reviews.add(newReview);
-//                        adapter.notifyDataSetChanged();
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
 
-//        createAdapter();
-//
-//        settingsImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (mAuth.getCurrentUser() != null) {
-//                    mAuth.signOut();
-//                    NavHostFragment.findNavController(ProfileFragment.this)
-//                            .navigate(R.id.action_global_loginFragment);
-//                }
-//            }
-//        });
 
     public void createAdapter() {
         reviewRecyclerView = requireView().findViewById(R.id.searchRecyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         reviewRecyclerView.setLayoutManager(layoutManager);
-        adapter = new SearchRecyclerViewAdapter(reviews);
+        adapter = new SearchRecyclerViewAdapter(reviews, currentUserName);
         reviewRecyclerView.setAdapter(adapter);
     }
 

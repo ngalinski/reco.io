@@ -206,7 +206,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 final DatabaseReference user = databaseReference.child("users")
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                user.addValueEventListener(new ValueEventListener() {
+                user.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         DatabaseReference newListRef = lists.child(String.valueOf(date.getTime()));
