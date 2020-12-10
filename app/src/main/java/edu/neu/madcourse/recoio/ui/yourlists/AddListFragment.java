@@ -48,6 +48,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
     private ArrayList<String> listReviewUIDS = new ArrayList<>();
     private HashMap<Integer, Boolean> isClickedHashMap = new HashMap<>();
 
+
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     DatabaseReference lists = databaseReference.child("lists");
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -58,7 +59,8 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
     private Button filterProductsButton;
     private Button clearFilterButton;
 
-    ChildEventListener childEventListenerFiltered;
+    private ChildEventListener childEventListener;
+
     final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
 
     public static AddListFragment newInstance() {
@@ -72,6 +74,12 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        reviewsRef.removeEventListener(childEventListener);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         reviews = new ArrayList<>();
@@ -82,7 +90,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
         filterProductsButton = requireView().findViewById(R.id.searchListButton);
         clearFilterButton = requireView().findViewById(R.id.clearButton);
 
-        ChildEventListener childEventListener = new ChildEventListener() {
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Review newReview = new Review(
@@ -144,46 +152,52 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
             }
         });
 
-        adapter.setItemClickListener(new AddListRecyclerViewAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(int position, Context context) {
-                Review clickedReview = reviews.get(position);
-                clickedReview.setClicked(!clickedReview.getClicked());
-                if (clickedReview.getClicked()) {
-                    listReviewUIDS.add(clickedReview.getUid());
-                } else {
-                    listReviewUIDS.remove(clickedReview.getUid());
-                }
-                adapter.notifyDataSetChanged();
-            }
-        });
-
         filterProductsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!filterText.getText().toString().equals("")){
+                    // create list
+                    // create new adapter
+
+
+                    final ArrayList<Review> filteredReviews = new ArrayList<>();
+
                     for (int i = 0; i < reviews.size(); i++){
+
                         if (reviews.get(i).getProductTitle().toLowerCase().contains(filterText.getText().toString().toLowerCase()) ){
-                            reviews.get(i).setFilteredOut(false);
-                        } else {
-                            reviews.get(i).setFilteredOut(true);
+                            filteredReviews.add(reviews.get(i));
+
                         }
+//                        adapter.notifyDataSetChanged();
                     }
-                };
+                    final AddListRecyclerViewAdapter filteredAdapter = new AddListRecyclerViewAdapter(filteredReviews);
+                    filteredAdapter.setItemClickListener(new AddListRecyclerViewAdapter.ItemClickListener() {
+                        @Override
+                        public void onItemClick(int position, Context context) {
+                            Review clickedReview = filteredReviews.get(position);
+                            clickedReview.setClicked(!clickedReview.getClicked());
+                            if (clickedReview.getClicked()) {
+                                listReviewUIDS.add(clickedReview.getUid());
+                            } else {
+                                listReviewUIDS.remove(clickedReview.getUid());
+                            }
+                            filteredAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    reviewRecyclerView.setAdapter(filteredAdapter);
+                }
             }
+
+
         });
 
         clearFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < reviews.size(); i++){
-                    reviews.get(i).setFilteredOut(false);
-                    System.out.println(reviews.get(i).getProductTitle() + "\n\n");
-                }
+                reviewRecyclerView.setAdapter(adapter);
             }
         });
     }
-
 
     public void newListClick() {
         if (!listEditText.getText().toString().equals("")) {
