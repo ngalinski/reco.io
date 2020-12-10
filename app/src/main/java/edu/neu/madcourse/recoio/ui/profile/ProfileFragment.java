@@ -25,8 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,12 +39,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import edu.neu.madcourse.recoio.R;
 import edu.neu.madcourse.recoio.Review;
+
 import edu.neu.madcourse.recoio.ui.addreview.AddReviewFragment;
 
 import static android.app.Activity.RESULT_OK;
@@ -72,6 +76,8 @@ public class ProfileFragment extends Fragment {
 
     private Bitmap newProfilePicBitmap;
 
+    private String currentUserName;
+
     private ArrayList<Review> reviews;
 
     public static ProfileFragment newInstance() {
@@ -98,11 +104,23 @@ public class ProfileFragment extends Fragment {
         reviews = new ArrayList<>();
 
 
-
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                String token = task.getResult();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference users = database.getReference("users");
+                users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("token").setValue(token);
+            }
+        });
 
         currUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentUserName = (String) snapshot.child("name").getValue();
                 userNameTextView.setText((String) snapshot.child("name").getValue());
                 currentUserFollowersCountTV.setText(String.valueOf(snapshot.child("followerCount").getValue()));
                 currentUserFollowingCountTV.setText(String.valueOf(snapshot.child("followingCount").getValue()));
@@ -202,7 +220,7 @@ public class ProfileFragment extends Fragment {
         profileReviewRecyclerView = requireView().findViewById(R.id.otherUserReviews);
         layoutManager = new LinearLayoutManager(getActivity());
         profileReviewRecyclerView.setLayoutManager(layoutManager);
-        adapter = new ProfileReviewRecyclerViewAdapter(reviews);
+        adapter = new ProfileReviewRecyclerViewAdapter(reviews, currentUserName);
         profileReviewRecyclerView.setAdapter(adapter);
     }
 

@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,9 +62,12 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
     private Button filterProductsButton;
     private Button clearFilterButton;
 
+    private String currentUserName;
+
     private ChildEventListener childEventListener;
 
     final DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference().child("reviews");
+
 
     public static AddListFragment newInstance() {
         return new AddListFragment();
@@ -89,6 +95,19 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
         createListButton = requireView().findViewById(R.id.createListButton);
         filterProductsButton = requireView().findViewById(R.id.searchListButton);
         clearFilterButton = requireView().findViewById(R.id.clearButton);
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                String token = task.getResult();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference users = database.getReference("users");
+                users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("token").setValue(token);
+            }
+        });
 
         childEventListener = new ChildEventListener() {
             @Override
@@ -170,7 +189,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
                         }
 //                        adapter.notifyDataSetChanged();
                     }
-                    final AddListRecyclerViewAdapter filteredAdapter = new AddListRecyclerViewAdapter(filteredReviews);
+                    final AddListRecyclerViewAdapter filteredAdapter = new AddListRecyclerViewAdapter(filteredReviews, currentUserName);
                     filteredAdapter.setItemClickListener(new AddListRecyclerViewAdapter.ItemClickListener() {
                         @Override
                         public void onItemClick(int position, Context context) {
@@ -209,6 +228,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
                 user.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        currentUserName = (String) snapshot.child("name").getValue();
                         DatabaseReference newListRef = lists.child(String.valueOf(date.getTime()));
 
                         DatabaseReference userLists = user.child("lists");
@@ -236,7 +256,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
         reviewRecyclerView = requireView().findViewById(R.id.addListRecyclerView);
         layoutManager = new LinearLayoutManager(requireActivity());
         reviewRecyclerView.setLayoutManager(layoutManager);
-        adapter = new AddListRecyclerViewAdapter(reviews);
+        adapter = new AddListRecyclerViewAdapter(reviews, currentUserName);
         reviewRecyclerView.setAdapter(adapter);
     }
 
