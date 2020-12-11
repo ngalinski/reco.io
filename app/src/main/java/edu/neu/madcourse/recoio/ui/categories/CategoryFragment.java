@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import edu.neu.madcourse.recoio.R;
 import edu.neu.madcourse.recoio.Review;
@@ -110,6 +111,12 @@ public class CategoryFragment extends Fragment {
                         );
                         System.out.println(newReview);
                         reviews.add(newReview);
+                        reviews.sort(new Comparator<Review>() {
+                            @Override
+                            public int compare(Review o1, Review o2) {
+                                return o2.getUid().compareTo(o1.getUid());
+                            }
+                        });
                         adapter.notifyDataSetChanged();
                     }
 

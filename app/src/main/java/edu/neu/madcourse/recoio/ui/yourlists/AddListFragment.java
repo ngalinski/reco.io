@@ -31,6 +31,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -124,6 +125,12 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
                 );
                 newReview.setClicked(false);
                 reviews.add(newReview);
+                reviews.sort(new Comparator<Review>() {
+                    @Override
+                    public int compare(Review o1, Review o2) {
+                        return o2.getUid().compareTo(o1.getUid());
+                    }
+                });
                 adapter.notifyDataSetChanged();
             }
 

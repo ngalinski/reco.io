@@ -37,6 +37,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 app:cardCornerRadius="50dp">
                 <ImageView
                     android:id="@+id/reviewOneImageView"
@@ -47,6 +48,7 @@
                     android:contentDescription="@string/category_review_picture" />
             </androidx.cardview.widget.CardView>
             <Space
+                android:id="@+id/spaceMiddle"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
@@ -54,7 +56,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="50dp">
+                app:cardCornerRadius="50dp"
+                android:layout_margin="4dp">
             <ImageView
                     android:id="@+id/reviewTwoImageView"
                     android:layout_width="100dp"

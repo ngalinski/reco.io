@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -68,11 +69,14 @@ public class YourListsRecyclerViewAdapter
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.categoryTextView.setText(lists.get(position).getListName());
+        holder.reviewTwoImgView.setVisibility(View.GONE);
+        holder.spaceMiddle.setVisibility(View.GONE);
+
         final Integer[] reviewCounter = {0};
 
         DatabaseReference listReviewsReference = listsReference.child(lists.get(position).getListUID()).child("reviews");
 
-        Query reviewsQuery = listReviewsReference.limitToFirst(2);
+        Query reviewsQuery = listReviewsReference.limitToFirst(1);
 
 
 
@@ -83,15 +87,13 @@ public class YourListsRecyclerViewAdapter
                 String pictureUID = snapshot.getKey();
                 assert pictureUID != null;
                 StorageReference pictureReference = pictureStorageRef.child(pictureUID);
-                switch (reviewCounter[0].toString()) {
-                    case "1":
-                        Glide.with(holder.reviewOneImgView).load(pictureReference)
-                                .into(holder.reviewOneImgView);
-                        break;
-                    case "2":
-                        Glide.with(holder.reviewTwoImgView).load(pictureReference)
-                                .into(holder.reviewTwoImgView);
-                        break;
+                if ("1".equals(reviewCounter[0].toString())) {
+                    Glide.with(holder.reviewOneImgView).load(pictureReference)
+                            .into(holder.reviewOneImgView);
+                    //                    case "2":
+//                        Glide.with(holder.reviewTwoImgView).load(pictureReference)
+//                                .into(holder.reviewTwoImgView);
+//                        break;
 //                        case "3":
 //                            Glide.with(holder.reviewThreeImgView).load(pictureReference)
 //                                    .into(holder.reviewThreeImgView);
@@ -138,6 +140,7 @@ public class YourListsRecyclerViewAdapter
         ImageView reviewTwoImgView;
         ImageView reviewThreeImgView;
         ImageView reviewFourImgView;
+        Space spaceMiddle;
 
         public ViewHolder(@NonNull final View itemView,
                           final ItemClickListener listener) {
@@ -147,6 +150,8 @@ public class YourListsRecyclerViewAdapter
             reviewTwoImgView = itemView.findViewById(R.id.reviewTwoImageView);
 //            reviewThreeImgView = itemView.findViewById(R.id.reviewThreeImageView);
 //            reviewFourImgView = itemView.findViewById(R.id.reviewFourImageView);
+
+            spaceMiddle = itemView.findViewById(R.id.spaceMiddle);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
