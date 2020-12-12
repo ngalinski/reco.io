@@ -175,7 +175,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                 final DatabaseReference user = databaseReference.child("users")
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 final boolean finalHasPicture = hasPicture;
-                user.addValueEventListener(new ValueEventListener() {
+                user.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         DatabaseReference newPostRef = reviews.child(String.valueOf(date.getTime()));

@@ -57,6 +57,8 @@ public class LoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
+        bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+        bottomNavigationView.setVisibility(View.GONE);
         return inflater.inflate(R.layout.login_fragment, container, false);
     }
 
@@ -74,8 +76,7 @@ public class LoginFragment extends Fragment {
         loginButton = requireView().findViewById(R.id.loginButton);
         signUpButton = requireView().findViewById(R.id.goToSignUpButton);
 
-        bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
-        bottomNavigationView.setVisibility(View.INVISIBLE);
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

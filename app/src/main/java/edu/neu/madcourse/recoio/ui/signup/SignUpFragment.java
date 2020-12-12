@@ -47,6 +47,8 @@ public class SignUpFragment extends Fragment {
     private EditText passwordEditText;
     private EditText passwordVerify;
 
+    BottomNavigationView bottomNavigationView;
+
     public static SignUpFragment newInstance() {
         return new SignUpFragment();
     }
@@ -56,6 +58,8 @@ public class SignUpFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+        bottomNavigationView.setVisibility(View.GONE);
         return inflater.inflate(R.layout.sign_up_fragment, container, false);
     }
 
