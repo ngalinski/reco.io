@@ -125,8 +125,7 @@ public class OtherProfileFragment extends Fragment {
                 otherUserFollowerCountTextView.setText(String.valueOf(snapshot.child("followerCount").getValue()));
                 otherUserFollowingCountTextView.setText(String.valueOf(snapshot.child("followingCount").getValue()));
                 otherUserFollowerCount = (Long) snapshot.child("followerCount").getValue();
-                if ( snapshot.child("hasProfilePic").getValue() != null
-                        || (boolean) snapshot.child("hasProfilePic").getValue()) {
+                if ((boolean) snapshot.child("hasProfilePic").getValue()) {
                     StorageReference userProfilePic = profilePictures
                             .child(otherUserUID);
                     Glide.with(requireView()).load(userProfilePic).into(otherUserProfilePictureImageView);

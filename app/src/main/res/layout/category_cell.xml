@@ -57,12 +57,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="50dp"
-                android:layout_margin="4dp">
-            <ImageView
+                    android:layout_margin="4dp">
+                <ImageView
                     android:id="@+id/reviewTwoImageView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:src="@drawable/reco_logo"
+                    android:scaleType="fitXY"
                     android:contentDescription="@string/category_review_picture" />
             </androidx.cardview.widget.CardView>
             <Space

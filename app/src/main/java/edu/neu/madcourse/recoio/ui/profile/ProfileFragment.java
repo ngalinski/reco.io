@@ -126,11 +126,12 @@ public class ProfileFragment extends Fragment {
                 userNameTextView.setText((String) snapshot.child("name").getValue());
                 currentUserFollowersCountTV.setText(String.valueOf(snapshot.child("followerCount").getValue()));
                 currentUserFollowingCountTV.setText(String.valueOf(snapshot.child("followingCount").getValue()));
-                if ( snapshot.child("hasProfilePic").getValue() != null
-                        || (boolean) snapshot.child("hasProfilePic").getValue()) {
+                if ((boolean) snapshot.child("hasProfilePic").getValue()) {
                     StorageReference userProfilePic = profilePictures
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
                     Glide.with(requireView()).load(userProfilePic).into(profilePictureImageView);
+                } else {
+                    profilePictureImageView.setImageResource(R.drawable.ic_profile);
                 }
             }
             @Override
