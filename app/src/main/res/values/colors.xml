@@ -2,8 +2,8 @@
 <resources>
     <!-- colors generated from https://flatuicolors.com/palette/ca-->
     <color name="colorPrimary">#85d484</color>
-    <color name="colorPrimaryDark">#10ac84</color>
-    <color name="colorAccent">#ff6b6b</color>
+    <color name="colorPrimaryDark">#498348</color>
+    <color name="colorAccent">#498348</color>
 
 <!--    <color name="colorPrimary">@color/gradEnd</color>-->
 <!--    <color name="colorPrimaryDark">@color/gradStart</color>-->
@@ -19,8 +19,8 @@
     <!-- original follower and following bgcolors -->
 <!--    <color name="followersBg">#65DCE5</color>-->
 <!--    <color name="followingBg">#49BEFF</color>-->
-    <color name="followersBg">#10ac84</color>
-    <color name="followingBg">#ff6b6b</color>
+    <color name="followersBg">#498348</color>
+    <color name="followingBg">#4e5e4d</color>
     <color name="grey">#E5E5E5</color>
     <color name="white">#FFFFFF</color>
 
