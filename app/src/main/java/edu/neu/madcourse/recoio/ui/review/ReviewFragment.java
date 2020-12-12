@@ -96,8 +96,7 @@ public class ReviewFragment extends Fragment {
         ratingBar = requireView().findViewById(R.id.reviewRatingBar);
         commentButton = requireView().findViewById(R.id.commentButton);
         commentEditText = requireView().findViewById(R.id.commentEditText);
-        // TODO: add number of likes to review page
-//        numLikes = requireView().findViewById();
+        numLikes = requireView().findViewById(R.id.reviewLikeCountTextView);
 
         commentsArrayList = new ArrayList<>();
 
@@ -111,6 +110,7 @@ public class ReviewFragment extends Fragment {
                 productTextName.setText((String)snapshot.child("product").getValue());
                 reviewTextView.setText((String) snapshot.child("reviewText").getValue());
                 ratingBar.setRating(Float.parseFloat((String) snapshot.child("rating").getValue()));
+                numLikes.setText(String.valueOf(snapshot.child("likeCount").getValue()));
                 reviewerNameTextView.setText((String) snapshot.child("ownerName").getValue());
                 if ((Boolean) snapshot.child("hasPicture").getValue()) {
                     StorageReference pictureRef = reviewPicturesReference.child(reviewUID);
