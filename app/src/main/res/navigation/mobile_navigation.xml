@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/welcomeFragment">
 
     <navigation android:id="@+id/app_navigation"
         app:startDestination="@id/navigation_newsfeed">
@@ -148,6 +148,18 @@
         tools:layout="@layout/sign_up_fragment">
         <action
             android:id="@+id/action_signUpFragment_to_app_navigation"
+            app:destination="@id/app_navigation" />
+    </fragment>
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="edu.neu.madcourse.recoio.ui.welcome.WelcomeFragment"
+        android:label="Reco.io"
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/action_welcomeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_app_navigation"
             app:destination="@id/app_navigation" />
     </fragment>
 </navigation>

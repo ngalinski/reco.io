@@ -164,7 +164,7 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressBar.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.GONE);
                         NavHostFragment.findNavController(AddReviewFragment.this)
                                 .navigate(R.id.navigation_newsfeed);
                     }
@@ -199,7 +199,11 @@ public class AddReviewFragment extends Fragment implements AdapterView.OnItemSel
                         userReviews.child(String.valueOf(date.getTime())).setValue(true);
 
 
-
+                        if (newProductBitMap == null) {
+                            progressBar.setVisibility(View.GONE);
+                            NavHostFragment.findNavController(AddReviewFragment.this)
+                                    .navigate(R.id.navigation_newsfeed);
+                        }
                     }
 
                     @Override

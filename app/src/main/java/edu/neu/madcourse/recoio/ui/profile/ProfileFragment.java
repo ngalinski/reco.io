@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +44,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import edu.neu.madcourse.recoio.R;
 import edu.neu.madcourse.recoio.Review;
@@ -154,6 +156,12 @@ public class ProfileFragment extends Fragment {
                                 (String) snapshot.child("owner").getValue()
                         );
                         reviews.add(newReview);
+                        reviews.sort(new Comparator<Review>() {
+                            @Override
+                            public int compare(Review o1, Review o2) {
+                                return o2.getUid().compareTo(o1.getUid());
+                            }
+                        });
                         adapter.notifyDataSetChanged();
                     }
 
@@ -192,8 +200,11 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 if (mAuth.getCurrentUser() != null) {
                     mAuth.signOut();
+                    NavOptions navOptions = new NavOptions.Builder()
+                            .setPopUpTo(R.id.navigation_profile, true)
+                            .build();
                     NavHostFragment.findNavController(ProfileFragment.this)
-                            .navigate(R.id.action_global_loginFragment);
+                            .navigate(R.id.action_global_loginFragment, new Bundle(), navOptions);
                 }
             }
         });

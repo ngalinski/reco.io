@@ -16,30 +16,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
+        <androidx.cardview.widget.CardView
             android:id="@+id/profile_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/border_circle">
+            android:layout_marginTop="16dp"
+            android:background="@drawable/border_circle"
+            app:cardCornerRadius="42.5dp">
 
             <ImageView
                 android:id="@+id/currentUserProfilePicImageView"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
-                android:layout_marginStart="9dp"
-                android:layout_marginTop="9dp"
-                android:layout_marginEnd="9dp"
-                android:layout_marginBottom="9dp"
-                android:adjustViewBounds="true"
                 android:background="@drawable/solid_circle"
-                android:padding="3dp"
-                android:scaleType="centerInside"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_profile"
-                app:srcCompat="@drawable/ic_profile" />
+                app:srcCompat="@drawable/ic_profile"
+                />
 
-        </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/currentUserName"
@@ -55,14 +51,15 @@
 
         <ImageButton
             android:id="@+id/settingsImageView"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_logout" />
+            android:src="@drawable/ic_logout"
+            android:background="@color/colorAccent"/>
 
     </RelativeLayout>
 
