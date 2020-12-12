@@ -63,7 +63,7 @@ public class YourListsRecyclerViewAdapter
         );
         return new ViewHolder(category, itemClickListener);
     }
-    
+
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
