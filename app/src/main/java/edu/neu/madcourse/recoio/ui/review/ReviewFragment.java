@@ -2,6 +2,7 @@ package edu.neu.madcourse.recoio.ui.review;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -178,7 +179,14 @@ public class ReviewFragment extends Fragment {
                                 otherUserInfoBundle);
             }
         });
-
+        commentEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
     }
 
     @Override
@@ -223,5 +231,10 @@ public class ReviewFragment extends Fragment {
         commentsRecyclerView.setLayoutManager(commentsLayoutManager);
         commentsAdapter = new CommentRecyclerViewAdapter(commentsArrayList);
         commentsRecyclerView.setAdapter(commentsAdapter);
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager)requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
