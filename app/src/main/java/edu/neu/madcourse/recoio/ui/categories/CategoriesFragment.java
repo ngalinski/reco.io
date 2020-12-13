@@ -1,10 +1,12 @@
 package edu.neu.madcourse.recoio.ui.categories;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -72,6 +74,15 @@ public class CategoriesFragment extends Fragment {
                                 categoryStringBundle);
             }
         });
+
+        searchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
     }
 
     public void createAdapter() {
@@ -80,5 +91,10 @@ public class CategoriesFragment extends Fragment {
         categoriesRecyclerView.setLayoutManager(layoutManager);
         adapter = new CategoriesRecyclerViewAdapter(categories);
         categoriesRecyclerView.setAdapter(adapter);
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager)requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

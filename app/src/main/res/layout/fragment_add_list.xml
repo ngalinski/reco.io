@@ -5,17 +5,22 @@
     android:id="@+id/addListLayoutConstraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.yourlists.AddListFragment">
+    tools:context=".ui.yourlists.AddListFragment"
+    android:clickable="true"
+    android:focusableInTouchMode="true">
 
     <EditText
         android:id="@+id/listNameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
         android:ems="10"
         android:hint="List Name"
         android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/createListButton"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,17 +46,19 @@
 
     <EditText
         android:id="@+id/searchList"
-        android:layout_width="210dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
         android:ems="10"
         android:hint="Filter for product"
         android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/listNameEditText"
+        app:layout_constraintEnd_toStartOf="@+id/searchListButton"
 
-        />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listNameEditText" />
 
     <Button
         android:id="@+id/searchListButton"

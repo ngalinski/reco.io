@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gradStart"
-    tools:context=".ui.signup.SignUpFragment">
+    tools:context=".ui.signup.SignUpFragment"
+    android:clickable="true"
+    android:focusableInTouchMode="true">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/signUpCardView"
