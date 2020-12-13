@@ -224,6 +224,7 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
         clearFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                filterText.setText("");
                 reviewRecyclerView.setAdapter(adapter);
             }
         });
