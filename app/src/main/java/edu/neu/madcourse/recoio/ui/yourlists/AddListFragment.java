@@ -213,6 +213,8 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
                         }
                     });
                     reviewRecyclerView.setAdapter(filteredAdapter);
+                    InputMethodManager inputMethodManager = (InputMethodManager)requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
                 }
             }
 
@@ -266,6 +268,8 @@ public class AddListFragment extends Fragment implements AdapterView.OnItemSelec
                         for (String reviewUID: listReviewUIDS) {
                             newListRef.child("reviews").child(reviewUID).setValue(true);
                         }
+                        InputMethodManager inputMethodManager = (InputMethodManager)requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
                         NavHostFragment.findNavController(AddListFragment.this)
                                 .navigate(R.id.navigation_your_lists);
                     }

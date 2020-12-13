@@ -57,6 +57,8 @@ public class CategoriesFragment extends Fragment {
                 if (!searchText.getText().toString().equals("")){
                     Bundle searchStringBundle = new Bundle();
                     searchStringBundle.putString("searchText", searchText.getText().toString());
+                    InputMethodManager inputMethodManager = (InputMethodManager)requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
                     NavHostFragment.findNavController(CategoriesFragment.this)
                             .navigate(R.id.action_navigation_categories_to_searchFragment,
                                     searchStringBundle);
